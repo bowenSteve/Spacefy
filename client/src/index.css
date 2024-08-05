@@ -1,13 +1,138 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+.navbar-scroll .nav-link,
+.navbar-scroll .fa-bars,
+.navbar-scroll .navar-brand {
+  color: #fff;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.navbar-scroll .nav-link:hover {
+  color: #6BB2F3;
+}
+
+.navbar-scrolled .nav-link,
+.navbar-scrolled .fa-bars,
+.navbar-scrolled .navar-brand {
+  color: #4f4f4f;
+}
+.navbtn:hover{
+  background-color: #295cc9;
+}
+
+.navbar-scroll,
+.navbar-scrolled {
+  background-color: #fff;
+}
+
+.navbar.navbar-scroll.navbar-scrolled {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+body {
+  background-color: #eee;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.custom-navbar {
+  height: 70px; 
+  display: flex;
+  align-items: center; 
+  background-color: #1E1E1E;
+}
+.brand {
+  margin-left: 50px;
+}
+
+.custom-navbar .navbar-nav .nav-link {
+  font-size: 20px; 
+  margin: 0 15px; 
+}
+.main-button{
+  background-color: #6BB2F3;
+}
+.main-text{
+  color: #fff;
+}
+.footer-body{
+  background-color: #1E1E1E;
+}
+.custom-footer-1{
+  font-size: 25px;
+  color: #fff;
+}
+.custom-footer{
+  font-size: 20px;
+  color: #fff;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px; 
+}
+.custom-dropdown {
+  position: relative;
+  text-align: left; 
+}
+.btn-color{
+  background-color: #6BB2F3;
+}
+
+.custom-dropdown .dropdown-menu {
+  left: 0; 
+  right: auto;
+}
+.dropdown-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%; 
+}
+
+.dropdown {
+  margin-left: 200px; 
+}
+
+.d-flex.align-items-center {
+  margin-top: 20px; 
+}
+
+.form-control {
+  max-width: 300px; 
+  margin-left: 20px; 
+}
+.space-item {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  width: 600px; 
+  height: 600px;
+}
+
+.dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dropdown-wrapper .dropdown {
+  margin-right: 20px;
+}
+
+.search-wrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-wrapper .form-control {
+  width: 100%;
+  max-width: 300px;
+}
+
+.space-image {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
