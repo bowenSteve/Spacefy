@@ -1,5 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 
 function Navbar(){
+  const navigate = useNavigate();
+
+  function handleLogin(id){
+    navigate("/login");
+  }
+
     return (
         <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -20,7 +28,7 @@ function Navbar(){
             </li>
           </ul>
         </div>
-        <button className="btn main-button navbtn me-0">
+        <button className="btn main-button navbtn me-0" onClick={() => handleLogin()}>
           <span>Login</span>
         </button>
       </div>

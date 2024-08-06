@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import image1 from "../images/main.jpg";
@@ -7,12 +8,14 @@ function MainPage() {
   const [spaces, setSpaces] = useState([]);
   const [selectedOption, setSelectedOption] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:4000/spaces')
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
+        console.log(data)
       })
       .catch(error => {
         console.error('Error fetching spaces:', error);
@@ -25,6 +28,9 @@ function MainPage() {
 
   function handleSearch(event) {
     setSearchTerm(event.target.value);
+  }
+  function handleSpaceClick(id){
+    navigate(`/space/${id}`);
   }
 
   const filteredSpaces = spaces.filter(space =>
@@ -71,7 +77,7 @@ function MainPage() {
         <div className="container">
           <div className="row">
             {filteredSpaces.map((space, index) => (
-              <div key={index} className="col-md-6 space-item mb-4">
+              <div key={index} className="col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
                 <h2>{space.name}</h2>
                 <p><strong>Special Features:</strong></p>
                 <ul>
