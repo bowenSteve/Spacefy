@@ -50,7 +50,7 @@ def create_spaces(users):
         Space(name='Workshop Area E', description='A spacious workshop area', hourly_price=60.0, daily_price=500.0, owner_id=users[1].id, availability=True, capacity=100),
         Space(name='Event Hall F', description='A large event hall', hourly_price=100.0, daily_price=800.0, owner_id=users[2].id, availability=True, capacity=200),
         Space(name='Outdoor Patio G', description='A nice outdoor patio', hourly_price=25.0, daily_price=150.0, owner_id=users[0].id, availability=True, capacity=30),
-        Space(name='Training Room H', description='A room equipped for training sessions', hourly_price=35.0, daily_price=250.0, owner_id=users[1].id, availability=True, capacity=15),
+    
     ]
     db.session.add_all(spaces)
     db.session.commit()
