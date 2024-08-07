@@ -162,6 +162,15 @@ main {
 .link-color{
   text-decoration: none;
 }
+.book-btn{
+  background-color: #1AFC06;
+}
+.book-btn:hover{
+  background-color: #15580f;
+}
+.no-list-style {
+  list-style-type: none;
+}
 
 /* Austin */
 

@@ -3,6 +3,7 @@ import MainPage from "./components/MainPage";
 import SpaceCard from "./components/SpaceCard";
 import Home from "./components/Home"
 import SignUp from "./components/SignUP"
+import Payment from "./components/Payment"
 
 const routes = [
 
@@ -26,6 +27,10 @@ const routes = [
         path: "/signup",
         element: <SignUp />
     }
+    // {
+    //     path: "/payment/:id",
+    //     element:<Payment />
+    // }
 
 
 ]

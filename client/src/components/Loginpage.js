@@ -25,13 +25,12 @@ function LoginPage() {
         setIsLoading(false);
         if (r.ok) {
           r.json().then((data) => {
-            // Save the JWT token in local storage
             localStorage.setItem('token', data.access_token);
-            // Navigate to the home page
-            navigate("/home");
+            navigate("/");
           });
         } else {
-          r.json().then((err) => setErrors(err.errors || ["An error occurred."]));
+          r.json().then((err) => setErrors(err.errors || ["Invalid email or password."]));
+          console.log(r)
         }
       });
   }

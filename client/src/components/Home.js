@@ -11,7 +11,7 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4000/spaces')
+    fetch('http://localhost:5000/spaces')
       .then(res => res.json())
       .then(data => {
         setSpaces(data);

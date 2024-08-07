@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import ARRAY
 
 db = SQLAlchemy()
 
@@ -78,6 +79,8 @@ class Booking(db.Model):
     def __repr__(self):
         return f'<Booking {self.id}>'
   
+
+
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)  
@@ -87,9 +90,28 @@ class Space(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     availability = db.Column(db.Boolean, nullable=False, default=True)
-    
+    image_url = db.Column(db.String(255), nullable=True)  # New field
+    location = db.Column(db.String(255), nullable=True)  # New field
+    special_features = db.Column(ARRAY(db.String), nullable=True)  # New field
+    capacity = db.Column(db.Integer, nullable=True, default=0) 
+
     bookings = relationship('Booking', back_populates='space')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'hourly_price': self.hourly_price,
+            'daily_price': self.daily_price,
+            'owner_id': self.owner_id,
+            'created_at': self.created_at.isoformat(),
+            'availability': self.availability,
+            'image_url': self.image_url,
+            'location': self.location,
+            'special_features': self.special_features,
+            'capacity': self.capacity
+        }
     
     def __repr__(self):
         return f'<Space {self.id}>'
-

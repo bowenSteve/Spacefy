@@ -11,7 +11,7 @@ function MainPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4000/spaces')
+    fetch('http://127.0.0.1:5000/spaces')
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
@@ -37,6 +37,15 @@ function MainPage() {
     space.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     space.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const sortedSpaces = filteredSpaces.sort((a, b) => {
+    if (selectedOption === 'Rates') {
+      return a.hourly_price - b.hourly_price;
+    } else if (selectedOption === 'Capacity') {
+      return a.capacity - b.capacity;
+    } else {
+      return 0;
+    }
+  });
 
   return (
     <div>
@@ -76,17 +85,20 @@ function MainPage() {
         </div>
         <div className="container">
           <div className="row">
-            {filteredSpaces.map((space, index) => (
+            {sortedSpaces.map((space, index) => (
               <div key={index} className="col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
                 <h2>{space.name}</h2>
                 <p><strong>Special Features:</strong></p>
                 <ul>
                   {space.special_features.map((feature, i) => (
-                    <li key={i}>{feature}</li>
+                   <li className="no-list-style " key={i}>
+                     <i class="bi bi-check2"> </i> {feature}</li>
                   ))}
                 </ul>
                 <p><strong>Capacity:</strong> {space.capacity}</p>
                 <p><strong>Location:</strong> {space.location}</p>
+                <p><strong>Hourly Rates:</strong> ${space.hourly_price}</p>
+                <p><strong>Daily Rates:</strong> ${space.daily_price}</p>
                 <img alt="image" src={space.image_url} className="space-image" />
               </div>
             ))}

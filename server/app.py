@@ -93,6 +93,37 @@ def get_user_details():
 
     return jsonify(user_data), 200
 
+    #spaces
+@app.route('/spaces', methods=['GET'])
+def get_spaces():
+    spaces = Space.query.all()
+    spaces_list = [
+        {
+            'id': space.id,
+            'name': space.name,
+            'description': space.description,
+            'hourly_price': space.hourly_price,
+            'daily_price': space.daily_price,
+            'owner_id': space.owner_id,
+            'created_at': space.created_at.isoformat(),
+            'availability': space.availability,
+            'image_url': space.image_url,
+            'location': space.location,
+            'special_features': space.special_features,
+            'capacity': space.capacity
+        }
+        for space in spaces
+    ]
+    
+    return jsonify(spaces_list)
+
+@app.route('/spaces/<int:id>', methods=['GET'])
+def get_a_space(id):
+    space = Space.query.filter_by(id=id).first()
+    if not space:
+        return jsonify({"error": "space not found"}), 404
+    else:
+        return jsonify(space.to_dict()), 200
 
 
 if __name__ == '__main__':
