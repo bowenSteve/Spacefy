@@ -4,14 +4,14 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import image1 from "../images/main.jpg";
 
-function MainPage() {
+function Home() {
   const [spaces, setSpaces] = useState([]);
   const [selectedOption, setSelectedOption] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/spaces')
+    fetch('http://localhost:5000/spaces')
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
@@ -37,15 +37,6 @@ function MainPage() {
     space.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     space.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const sortedSpaces = filteredSpaces.sort((a, b) => {
-    if (selectedOption === 'Rates') {
-      return a.hourly_price - b.hourly_price;
-    } else if (selectedOption === 'Capacity') {
-      return a.capacity - b.capacity;
-    } else {
-      return 0;
-    }
-  });
 
   return (
     <div>
@@ -85,20 +76,17 @@ function MainPage() {
         </div>
         <div className="container">
           <div className="row">
-            {sortedSpaces.map((space, index) => (
+            {filteredSpaces.map((space, index) => (
               <div key={index} className="col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
                 <h2>{space.name}</h2>
                 <p><strong>Special Features:</strong></p>
                 <ul>
                   {space.special_features.map((feature, i) => (
-                   <li className="no-list-style " key={i}>
-                     <i class="bi bi-check2"> </i> {feature}</li>
+                    <li key={i}>{feature}</li>
                   ))}
                 </ul>
                 <p><strong>Capacity:</strong> {space.capacity}</p>
                 <p><strong>Location:</strong> {space.location}</p>
-                <p><strong>Hourly Rates:</strong> ${space.hourly_price}</p>
-                <p><strong>Daily Rates:</strong> ${space.daily_price}</p>
                 <img alt="image" src={space.image_url} className="space-image" />
               </div>
             ))}
@@ -110,4 +98,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default Home;

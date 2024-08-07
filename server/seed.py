@@ -1,8 +1,11 @@
-from app import app  
-from datetime import datetime, timedelta
-from models import db, User, Agreement, Payment, UserRole, Booking, Space
-from werkzeug.security import generate_password_hash
 import os
+from datetime import datetime, timedelta
+from flask import Flask
+from werkzeug.security import generate_password_hash
+from app import app
+from models import db, User, Agreement, Payment, UserRole, Booking, Space
+
+
 
 def create_users():
     users = [
@@ -43,14 +46,90 @@ def create_roles(users):
 
 def create_spaces(users):
     spaces = [
-        Space(name='Conference Room A', description='A large conference room', hourly_price=50.0, daily_price=400.0, owner_id=users[0].id, availability=True, capacity=50),
-        Space(name='Private Office B', description='A private office space', hourly_price=30.0, daily_price=200.0, owner_id=users[1].id, availability=True, capacity=10),
-        Space(name='Coworking Desk C', description='A shared coworking desk', hourly_price=10.0, daily_price=70.0, owner_id=users[2].id, availability=True, capacity=1),
-        Space(name='Meeting Room D', description='A medium-sized meeting room', hourly_price=40.0, daily_price=300.0, owner_id=users[0].id, availability=True, capacity=20),
-        Space(name='Workshop Area E', description='A spacious workshop area', hourly_price=60.0, daily_price=500.0, owner_id=users[1].id, availability=True, capacity=100),
-        Space(name='Event Hall F', description='A large event hall', hourly_price=100.0, daily_price=800.0, owner_id=users[2].id, availability=True, capacity=200),
-        Space(name='Outdoor Patio G', description='A nice outdoor patio', hourly_price=25.0, daily_price=150.0, owner_id=users[0].id, availability=True, capacity=30),
-    
+        Space(
+            name='Conference Room A',
+            description='A large conference room',
+            hourly_price=50.0,
+            daily_price=400.0,
+            owner_id=users[0].id,
+            availability=True,
+            capacity=50,
+            image_url='https://plus.unsplash.com/premium_photo-1661878787649-71d9b0713b8a?q=80&w=2098&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Nairobi',
+            special_features=['Projector', 'Whiteboard']
+        ),
+        Space(
+            name='Private Office B',
+            description='A private office space',
+            hourly_price=30.0,
+            daily_price=200.0,
+            owner_id=users[1].id,
+            availability=True,
+            capacity=10,
+            image_url='https://images.unsplash.com/photo-1462826303086-329426d1aef5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Nakuru',
+            special_features=['Desk', 'Wi-Fi']
+        ),
+        Space(
+            name='Coworking Desk C',
+            description='A shared coworking desk',
+            hourly_price=10.0,
+            daily_price=70.0,
+            owner_id=users[2].id,
+            availability=True,
+            capacity=1,
+            image_url='https://images.unsplash.com/photo-1503423571797-2d2bb372094a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Nairobi',
+            special_features=['Wi-Fi', 'Coffee']
+        ),
+        Space(
+            name='Meeting Room D',
+            description='A medium-sized meeting room',
+            hourly_price=40.0,
+            daily_price=300.0,
+            owner_id=users[0].id,
+            availability=True,
+            capacity=20,
+            image_url='https://plus.unsplash.com/premium_photo-1661879435429-a396d927c686?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Thika',
+            special_features=['Conference Phone', 'TV Screen']
+        ),
+        Space(
+            name='Workshop Area E',
+            description='A spacious workshop area',
+            hourly_price=60.0,
+            daily_price=500.0,
+            owner_id=users[1].id,
+            availability=True,
+            capacity=100,
+            image_url='https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Mombasa',
+            special_features=['Tools', 'Workbenches']
+        ),
+        Space(
+            name='Event Hall F',
+            description='A large event hall',
+            hourly_price=100.0,
+            daily_price=800.0,
+            owner_id=users[2].id,
+            availability=True,
+            capacity=200,
+            image_url='https://images.unsplash.com/photo-1505624198937-c704aff72608?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Nairobi',
+            special_features=['Stage', 'Sound System']
+        ),
+        Space(
+            name='Outdoor Patio G',
+            description='A nice outdoor patio',
+            hourly_price=25.0,
+            daily_price=150.0,
+            owner_id=users[0].id,
+            availability=True,
+            capacity=30,
+            image_url='https://images.unsplash.com/photo-1586814207575-0dea25062083?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            location='Naivasha',
+            special_features=['Seating', 'Grill']
+        ),
     ]
     db.session.add_all(spaces)
     db.session.commit()
@@ -69,9 +148,15 @@ def create_bookings(users, spaces):
     db.session.commit()
 
 def seed_data():
-    if os.path.exists('app.db'):
-        os.remove('app.db')
-    db.create_all()
+    print("Deleting data...")
+    Booking.query.delete()
+    Payment.query.delete()
+    Agreement.query.delete()
+    UserRole.query.delete()
+    Space.query.delete()
+    User.query.delete()
+
+    db.session.commit()
 
     users = create_users()
     create_agreements(users)
@@ -81,7 +166,6 @@ def seed_data():
     create_bookings(users, spaces)
 
 if __name__ == '__main__':
-    
     with app.app_context():
         seed_data()
     print("Database has been seeded.")

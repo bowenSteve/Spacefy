@@ -8,7 +8,7 @@ function SpaceCard() {
   const [space, setSpace] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/spaces/${id}`)
+    fetch(`http://localhost:5000/spaces/${id}`)
       .then(res => res.json())
       .then(data => {
         setSpace(data);
