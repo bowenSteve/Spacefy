@@ -30,7 +30,7 @@ function MainPage() {
     setSearchTerm(event.target.value);
   }
   function handleSpaceClick(id){
-    navigate(`/space/${id}`);
+    navigate(`/payment/${id}`);
   }
 
   const filteredSpaces = spaces.filter(space =>
