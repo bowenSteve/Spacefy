@@ -7,6 +7,9 @@ import Payment from "./components/Payment"
 import SimulatePay from "./components/SimulatePay";
 import Profile from "./components/Profile"
 
+import Agreement from "./components/Agreement";
+
+
 const routes = [
 
     {
@@ -40,6 +43,12 @@ const routes = [
     {
         path:"/profile",
         element:<Profile />
+
+    },
+    {
+        path:"/agreement",
+        element:<Agreement />
+
     }
 
 
