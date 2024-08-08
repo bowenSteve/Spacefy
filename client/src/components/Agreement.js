@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const AgreementAndTerms = () => {
+const Agreement = () => {
   const [isAccepted, setIsAccepted] = useState(false);
 
   const handleAcceptance = () => {
@@ -36,24 +36,10 @@ const AgreementAndTerms = () => {
             about you, as described in our privacy policy.
           </li>
         </ul>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={isAccepted}
-              onChange={handleAcceptance}
-            />
-            I have read and agree to the terms and conditions.
-          </label>
-        </div>
-        {isAccepted && (
-          <div>
-            <p>Thank you for accepting the agreement and terms.</p>
-          </div>
-        )}
+        
       </div>
     </div>
   );
 };
 
-export default AgreementAndTerms;
+export default Agreement;
