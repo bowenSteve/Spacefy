@@ -13,6 +13,12 @@ function SpaceCard() {
   const [rate, setRate] = useState(0);
   const navigate = useNavigate();
 
+
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const navigate = useNavigate();
+
+
+
   useEffect(() => {
     fetch(`http://localhost:5000/spaces/${id}`)
       .then(res => res.json())
@@ -25,9 +31,39 @@ function SpaceCard() {
         console.error('Error fetching space:', error);
       });
   }, [id, startDate, endDate]);
-
   const calculateTaxAndTotal = (space) => {
     const taxRate = 0.13; // Updated tax rate
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      fetch("http://127.0.0.1:5000/current_user", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Failed to fetch current user");
+          }
+        })
+        .then(data => {
+          if (data.id) {
+            setIsLoggedin(true);
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching current user:", error);
+        });
+    }
+  }, []);
+
+  const calculateTaxAndTotal = (space) => {
+    const taxRate = 0.13; 
+
     const baseRate = Math.round(space.hourly_price || 0);
     const duration = Math.round(calculateDuration(startDate, endDate));
     const calculatedTax = Math.round(baseRate * duration * taxRate);
@@ -129,6 +165,48 @@ function SpaceCard() {
             </div>
           </form>
         </div>
+        </div>
+        <div className="mt-auto">
+          <h3>Book This Space</h3>
+          <form>
+            <div className="mb-3">
+              <label htmlFor="startDate" className="form-label">Start Date/Time</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="startDate"
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="endDate" className="form-label">End Date/Time</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="endDate"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </div>
+            <p className="mb-4"><strong>Tax:</strong> ${Math.round(tax)}</p>
+            <p className="mb-4"><strong>Total Amount:</strong> ${Math.round(totalAmount)}</p>
+            
+            <div className="d-flex justify-content-center">
+              <button
+                type="button"
+                className="btn book-btn2"
+                onClick={handlePayButtonClick}
+                disabled={!isLoggedin}
+              >
+                <span className={!isLoggedin ? "text-warning fw-bold" : ""}>
+                  {isLoggedin ? "Proceed to Payment" : "Login to continue"}
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+
       </div>
       <Footer />
     </div>

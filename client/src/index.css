@@ -308,9 +308,15 @@ input {
 }
 .sidebar {
   width: 80px;
+
   height: calc(100vh - 56px); /* Adjust height to be below the navbar */
   position: fixed;
   top: 56px; /* Navbar height */
+
+  height: calc(100vh - 56px); 
+  position: fixed;
+  top: 56px; 
+
   left: 0;
   background-color: #f8f9fa;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -325,10 +331,17 @@ input {
   background-color: #020202;
 }
 .sidebar .btn {
+
   position: absolute;
   top: 10px;
   left: 10px;
 }
+
+
+  position: relative; 
+  margin: 5px;
+}
+
 
 .canvas-menu {
   display: none;
@@ -364,6 +377,43 @@ background-color: white;
 .container {
   transition: margin-left 0.3s ease;
 }
+
+
+
+
+.sidebar {
+  transition: width 0.3s;
+}
+
+
+.container {
+  transition: margin-left 0.3s;
+  overflow: hidden; 
+}
+
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+.btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.sidebar .btn {
+  display: block;   width: 100%; 
+}
+
+.canvas-menu ul {
+  padding: 0; 
+  margin: 0;
+}
+
+.canvas-menu li {
+  margin-bottom: 10px; 
+}
+
 
 
 
