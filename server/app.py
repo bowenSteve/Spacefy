@@ -125,6 +125,48 @@ def get_a_space(id):
     else:
         return jsonify(space.to_dict()), 200
 
+@app.route('/create_booking', methods=['POST'])
+@jwt_required()
+def create_booking():
+    current_user_id = get_jwt_identity()  # Assumes this returns the user ID
+    data = request.get_json()
 
+    # Debugging: Print received data
+    print('Received data:', data)
+
+    space_id = data.get('id')
+    start_time = data.get('startDate')
+    end_time = data.get('endDate')
+    total_amount = data.get('totalAmount')
+
+    # Check if all required fields are provided
+    if not all([space_id, start_time, end_time, total_amount]):
+        return jsonify({"message": "All fields are required"}), 400
+
+    # Convert strings to datetime objects if necessary
+    try:
+        start_time = datetime.fromisoformat(start_time)
+        end_time = datetime.fromisoformat(end_time)
+    except ValueError:
+        return jsonify({"message": "Invalid date format"}), 400
+
+    # Convert space_id and total_amount to appropriate types
+    try:
+        space_id = int(space_id)
+        total_amount = float(total_amount)
+    except ValueError:
+        return jsonify({"message": "Invalid data type"}), 400
+
+    new_booking = Booking(
+        user_id=current_user_id,
+        space_id=space_id,
+        start_time=start_time,
+        end_time=end_time,
+        total_amount=total_amount
+    )
+    db.session.add(new_booking)
+    db.session.commit()
+
+    return jsonify({"message": "Booking added successfully!"}), 201
 if __name__ == '__main__':
     app.run(debug=True)
