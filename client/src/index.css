@@ -121,8 +121,12 @@ main {
   height: auto; 
   box-sizing: border-box; 
   overflow: hidden; 
+  cursor: pointer; 
+  transition: transform 0.2s; 
 }
-
+.space-item:hover {
+  transform: scale(1.02); 
+}
 .dropdown-wrapper {
   display: flex;
   align-items: center;
@@ -170,6 +174,18 @@ main {
 }
 .no-list-style {
   list-style-type: none;
+}
+.book-btn2 {
+  background-color:  #1AFC06;
+  color: #020202;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.book-btn2:hover {
+  background-color: #15580f;
 }
 
 /* Austin */
@@ -242,6 +258,147 @@ input {
 .signup-link a:hover {
   text-decoration: underline;
 }
+.all-links{
+  cursor: pointer; 
+}
+/* styles.css */
+.invoice {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #90E999;
+}
+
+.payment-options {
+  margin-bottom: 20px;
+}
+
+.payment-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.book-btn {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.book-btn:hover {
+  background-color: #218838;
+}
+.payment-options button {
+  width: 30%;
+}
+
+.payment-form {
+  margin-top: 20px;
+}
+.payment-options button {
+  width: 30%;
+}
+
+.payment-form {
+  margin-top: 20px;
+}
+.profile-btn{
+  text-decoration: none;
+}
+.sidebar {
+  width: 80px;
+  height: calc(100vh - 56px); 
+  position: fixed;
+  top: 56px; 
+  left: 0;
+  background-color: #f8f9fa;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.expanded {
+  width: 250px;
+}
+.sidebar-bg{
+  background-color: #020202;
+}
+.sidebar .btn {
+  position: relative; 
+  margin: 5px;
+}
+
+
+.canvas-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 250px;
+  height: calc(100% - 50px);
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.canvas-menu.open {
+  display: block;
+  background-color: #020202;
+}
+
+.canvas-menu h3 {
+  margin: 20px 0;
+}
+.btn-bg{
+background-color: white;
+}
+.canvas-menu a {
+  text-decoration: none;
+  color: #000;
+}
+
+.canvas-menu a:hover {
+  color: #ffffff;
+}
+
+.container {
+  transition: margin-left 0.3s ease;
+}
+
+
+
+.sidebar {
+  transition: width 0.3s;
+}
+
+
+.container {
+  transition: margin-left 0.3s;
+  overflow: hidden; 
+}
+
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+.btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.sidebar .btn {
+  display: block;   width: 100%; 
+}
+
+.canvas-menu ul {
+  padding: 0; 
+  margin: 0;
+}
+
+.canvas-menu li {
+  margin-bottom: 10px; 
+}
 
 
 
@@ -299,7 +456,7 @@ h2 {
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #007bff;
+  background-color: #6BB2F3;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
