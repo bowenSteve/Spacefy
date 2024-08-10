@@ -43,11 +43,11 @@ function Simulate() {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
           user_id:user,
-          space_id: id,
+          space_id: parseInt(id),
           start_time: startDate,
           end_time: endDate,
           total_amount: totalAmount
@@ -188,11 +188,7 @@ function Simulate() {
             )}
 
             <div className="mb-3 form-check">
-
               <Link to={"/agreement"}><label className="all-links">Read our terms and conditions</label></Link>
-
-              <Link><label className="all-links">Read our terms and conditions</label></Link>
-
               <input
                 type="checkbox"
                 className="form-check-input"

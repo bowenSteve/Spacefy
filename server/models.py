@@ -29,6 +29,16 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.email}>'
 
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    second_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password_hash = db.Column(db.Text, nullable=False)
+    national_id = db.Column(db.LargeBinary, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.email}>'
 
     
 class Agreement(db.Model):
@@ -69,8 +79,8 @@ class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    end_time = db.Column(db.DateTime, nullable=False)
+    start_time = db.Column(db.String, nullable=False)
+    end_time = db.Column(db.String, nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
     
     user = relationship('User', back_populates='bookings')

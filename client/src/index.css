@@ -308,15 +308,9 @@ input {
 }
 .sidebar {
   width: 80px;
-
-  height: calc(100vh - 56px); /* Adjust height to be below the navbar */
-  position: fixed;
-  top: 56px; /* Navbar height */
-
   height: calc(100vh - 56px); 
   position: fixed;
   top: 56px; 
-
   left: 0;
   background-color: #f8f9fa;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -331,13 +325,6 @@ input {
   background-color: #020202;
 }
 .sidebar .btn {
-
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-
   position: relative; 
   margin: 5px;
 }
@@ -377,7 +364,6 @@ background-color: white;
 .container {
   transition: margin-left 0.3s ease;
 }
-
 
 
 
@@ -428,7 +414,6 @@ background-color: white;
   padding: 10px;
   text-align: center;
 }
-
 
 
 /* Austin */
