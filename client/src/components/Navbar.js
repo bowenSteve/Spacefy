@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -91,11 +93,12 @@ function Navbar() {
           </ul>
         </div>
         {isLoggedIn && (
-          <Link to={"/profile"}><span className="navbar-text me-3 main-text profile-btn">
-            {firstName}
+          <Link to={"/profile"}><span className="navbar-text me-3 main-text link-color profile-btn">
+            <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2" />
+            <span>{firstName}</span>
           </span></Link>
         )}
-        <button className="btn main-button navbtn me-0" onClick={handleLogin}>
+        <button className="btn btn-outline-light navbtn me-0" onClick={handleLogin}>
           <span>{isLoggedIn ? "Logout" : "Login"}</span>
         </button>
       </div>
