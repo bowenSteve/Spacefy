@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -10,22 +10,23 @@ function Simulate() {
     itemName: '',
     rate: 0,
     tax: 0,
-    startDate: 0,
-    endDate: 0,
+    startDate: '',
+    endDate: '',
     id: 0
   };
   const [paymentMethod, setPaymentMethod] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [user, setUser] =  useState();
 
   const handlePaymentChange = (method) => {
     setPaymentMethod(method);
-    setPaymentSuccess(false); // Reset success message on payment method change
+    setPaymentSuccess(false);
   };
 
   const handleAgreeToTermsChange = (event) => {
     setAgreeToTerms(event.target.checked);
-    setPaymentSuccess(false); // Reset success message on agreement change
+    setPaymentSuccess(false); 
   };
 
   const calculateDuration = (start, end) => {
@@ -35,29 +36,69 @@ function Simulate() {
     return durationInHours > 0 ? durationInHours : 0;
   };
 
-
-  function createBooking() {
+  const createBooking = () => {
     const token = localStorage.getItem('authToken');
-   
+
     fetch("http://127.0.0.1:5000/create_booking", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ 
-        id: parseInt(id, 10), 
-        startDate: startDate, 
-        endDate: endDate, 
-        totalAmount: parseFloat(totalAmount) 
+      body: JSON.stringify({
+          user_id:user,
+          space_id: id,
+          start_time: startDate,
+          end_time: endDate,
+          total_amount: totalAmount
       }),
     })
-    .then(res => res.json())
-    .then(r => {
-      console.log(r);
+    .then(res => {
+      console.log('Response status:', res.status);
+      return res.json();
+    })
+    .then(data => {
+      // Logging data in the required format
+      console.log('Returned data:')
+
+      if (data.success) {
+          setPaymentSuccess(true);
+      } else {
+          console.error('Error creating booking:', data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
-  }
-  console.log(startDate)
+  };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      fetch("http://127.0.0.1:5000/current_user", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Failed to fetch current user");
+          }
+        })
+        .then(data => {
+          if (data.id) {
+            setUser(data.id)
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching current user:", error);
+        });
+    }
+  }, []);
+
   const handlePayButtonClick = () => {
     if (!paymentMethod) {
       alert("Please select a payment method.");
@@ -69,9 +110,10 @@ function Simulate() {
     }
     
     alert(`Proceeding to payment with ${paymentMethod}...`);
-    setPaymentSuccess(true); // Show success message
-    createBooking(); // Call booking creation function
+    setPaymentSuccess(true); 
+    createBooking(); 
   };
+
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />

@@ -80,20 +80,25 @@ function SpaceCard() {
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
   };
-
   const handlePayButtonClick = () => {
+    if (!isLoggedin) {
+      navigate("/login");
+      return;
+    }
+  
     navigate('/simulate', {
       state: {
         itemName: space.name,
         rate: rate,
         totalAmount: totalAmount,
         tax: tax,
-        startDate: startDate,
+        startDate:startDate,
         endDate: endDate,
         id: id
       }
     });
   };
+  
 
   if (!space) {
     return <div>Space not found</div>;
@@ -153,9 +158,8 @@ function SpaceCard() {
                 type="button"
                 className="btn book-btn2"
                 onClick={handlePayButtonClick}
-                disabled={!isLoggedin}
               >
-                <span className={!isLoggedin ? "text-warning fw-bold" : ""}>
+                <span className={!isLoggedin}>
                   {isLoggedin ? "Proceed to Payment" : "Login to continue"}
                 </span>
               </button>
