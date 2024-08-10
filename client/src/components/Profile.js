@@ -22,7 +22,7 @@ function Profile() {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Failed to fetch user details");
+          throw new Error("No user is Logged in");
         }
         return res.json();
       })

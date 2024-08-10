@@ -4,7 +4,7 @@ function BookingsContent() {
     const [bookings, setBookings] = useState([]);
 
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/all_bookings", {
+        fetch("http://127.0.0.1:5000/user_bookings", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
