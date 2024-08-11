@@ -26,11 +26,29 @@ def create_agreements(users):
     db.session.add_all(agreements)
     db.session.commit()
 
-def create_payments(users):
+def create_payments(users, bookings):
     payments = [
-        Payment(payment_date=datetime.utcnow(), amount=100.0, user_id=users[0].id),
-        Payment(payment_date=datetime.utcnow(), amount=200.0, user_id=users[1].id),
-        Payment(payment_date=datetime.utcnow(), amount=300.0, user_id=users[2].id),
+        Payment(
+            payment_date=datetime.utcnow(),
+            tax=5.0,  # Example tax value
+            amount=100.0,
+            user_id=users[0].id,
+            booking_id=bookings[0].id  # Adjust based on available bookings
+        ),
+        Payment(
+            payment_date=datetime.utcnow(),
+            tax=10.0,  # Example tax value
+            amount=200.0,
+            user_id=users[1].id,
+            booking_id=bookings[1].id  # Adjust based on available bookings
+        ),
+        Payment(
+            payment_date=datetime.utcnow(),
+            tax=15.0,  # Example tax value
+            amount=300.0,
+            user_id=users[2].id,
+            booking_id=bookings[2].id  # Adjust based on available bookings
+        ),
     ]
     db.session.add_all(payments)
     db.session.commit()
@@ -146,6 +164,8 @@ def create_bookings(users, spaces):
     ]
     db.session.add_all(bookings)
     db.session.commit()
+    return bookings  # Ensure that the list of bookings is returned
+
 
 def seed_data():
     print("Deleting data...")
@@ -160,12 +180,13 @@ def seed_data():
 
     users = create_users()
     create_agreements(users)
-    create_payments(users)
+    spaces = create_spaces(users)  # Create spaces first to get available bookings
+    bookings = create_bookings(users, spaces)  # Create bookings and get them
+    create_payments(users, bookings)  # Pass both users and bookings to create_payments
     create_roles(users)
-    spaces = create_spaces(users)
-    create_bookings(users, spaces)
 
 if __name__ == '__main__':
     with app.app_context():
         seed_data()
     print("Database has been seeded.")
+

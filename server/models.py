@@ -57,13 +57,41 @@ class Agreement(db.Model):
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     payment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    tax = db.Column(db.Float, nullable=False, default=0)
     amount = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
     
     user = relationship('User', back_populates='payments')
+    booking = relationship('Booking', back_populates='payments')  # Updated to match the Booking model
 
+        
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'payment_date': self.payment_date.isoformat(),
+            'tax': self.tax,
+            'amount': self.amount,
+            'user_id': self.user_id,
+            'booking_id': self.booking_id,
+            'user': {
+                'id': self.user.id,
+                'first_name': self.user.first_name,
+                'second_name': self.user.second_name
+            },
+            'booking': {
+                'id': self.booking.id,
+                'start_time': self.booking.start_time,
+                'end_time': self.booking.end_time,
+                'total_amount': self.booking.total_amount
+            }
+        }
+
+    
     def __repr__(self):
         return f'<Payment {self.id}>'
+
+
     
 class UserRole(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -75,6 +103,8 @@ class UserRole(db.Model):
     def __repr__(self):
         return f'<UserRole {self.id}>'
       
+from datetime import datetime
+
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -82,12 +112,27 @@ class Booking(db.Model):
     start_time = db.Column(db.String, nullable=False)
     end_time = db.Column(db.String, nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
+    booking_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
     user = relationship('User', back_populates='bookings')
     space = relationship('Space', back_populates='bookings')
+    payments = db.relationship('Payment', back_populates='booking', uselist=True)  # Changed backref to 'booking'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'space_id': self.space_id,
+            'space_name': self.space.name,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'total_amount': self.total_amount,
+            'booking_date': self.booking_date.isoformat()
+        }
     
     def __repr__(self):
         return f'<Booking {self.id}>'
+
   
 
 

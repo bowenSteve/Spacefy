@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from datetime import timedelta
 from flask_cors import CORS
+from sqlalchemy.orm import joinedload
 
 app = Flask(__name__)
 CORS(app)
@@ -285,12 +286,89 @@ def user_bookings():
             'space_name': booking.space.name,
             'start_time': booking.start_time,
             'end_time': booking.end_time,
-            'total_amount': booking.total_amount
+            'total_amount': booking.total_amount,
+            'booking_date': booking.booking_date.isoformat(),
+            'payments': [
+                {
+                    'payment_date': payment.payment_date.isoformat(),
+                    'tax': payment.tax,
+                    'amount': payment.amount
+                }
+                for payment in booking.payments
+            ]
         }
         for booking in bookings
     ]
 
     return jsonify(bookings_list), 200
+
+
+
+
+#payments
+@app.route('/create_payment', methods=['POST'])
+@jwt_required()
+def create_payment():
+    current_user_id = get_jwt_identity()
+
+ 
+    data = request.get_json()
+
+
+    amount = data.get('amount')
+    tax = data.get('tax')
+    user_id =current_user_id
+    booking_id = data.get('booking_id')
+
+    if not amount or not user_id or not booking_id:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    if current_user_id != user_id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+ 
+    user = User.query.get(user_id)
+    booking = Booking.query.get(booking_id)
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    if not booking:
+        return jsonify({'error': 'Booking not found'}), 404
+
+    new_payment = Payment(
+        amount=amount,
+        tax=tax,
+        user_id=user_id,
+        booking_id=booking_id
+    )
+    db.session.add(new_payment)
+    db.session.commit()
+
+    return jsonify({'message': 'Payment created successfully', 'payment': new_payment.to_dict()}), 201
+
+
+
+
+
+
+@app.route("/user_payments", methods=["GET"])
+@jwt_required()
+def user_payments():
+    user_id = get_jwt_identity()
+    payments = Payment.query.filter_by(user_id=user_id).all()
+    payments_list = [
+        {
+            'id': payment.id,
+            'payment_date': payment.payment_date.isoformat(),
+            'tax': payment.tax,
+            'amount': payment.amount,
+            'space_name': payment.booking.space.name  # Access space name through booking
+        }
+        for payment in payments
+    ]
+
+    return jsonify(payments_list), 200
 
 
 if __name__ == '__main__':
