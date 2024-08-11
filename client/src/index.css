@@ -497,6 +497,12 @@ h2 {
 /* Brian */
 
 
+/* formik */
+.error-message {
+  color: red;
+  font-size: 0.875em; /* Adjust size as needed */
+  margin-top: 0.25em; /* Space between the input field and error message */
+}
 
 
 
