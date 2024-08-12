@@ -12,8 +12,8 @@ function SpaceCard() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [rate, setRate] = useState(0);
   const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     fetch(`http://localhost:5000/spaces/${id}`)
@@ -22,6 +22,7 @@ function SpaceCard() {
         setSpace(data);
         setRate(data.hourly_price);
         calculateTaxAndTotal(data);
+        setIsAvailable(data.availability);
       })
       .catch(error => {
         console.error('Error fetching space:', error);
@@ -57,7 +58,7 @@ function SpaceCard() {
   }, []);
 
   const calculateTaxAndTotal = (space) => {
-    const taxRate = 0.13; 
+    const taxRate = 0.13;
     const baseRate = Math.round(space.hourly_price || 0);
     const duration = Math.round(calculateDuration(startDate, endDate));
     const calculatedTax = Math.round(baseRate * duration * taxRate);
@@ -80,25 +81,30 @@ function SpaceCard() {
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
   };
+
   const handlePayButtonClick = () => {
+    if (!isAvailable) {
+      alert("This space is not available currently.");
+      return;
+    }
+
     if (!isLoggedin) {
       navigate("/login");
       return;
     }
-  
+
     navigate('/simulate', {
       state: {
         itemName: space.name,
         rate: rate,
         totalAmount: totalAmount,
         tax: tax,
-        startDate:startDate,
+        startDate: startDate,
         endDate: endDate,
         id: id
       }
     });
   };
-  
 
   if (!space) {
     return <div>Space not found</div>;
@@ -158,10 +164,9 @@ function SpaceCard() {
                 type="button"
                 className="btn book-btn2"
                 onClick={handlePayButtonClick}
+                disabled={!isAvailable}
               >
-                <span className={!isLoggedin}>
-                  {isLoggedin ? "Proceed to Payment" : "Login to continue"}
-                </span>
+                <span>{isAvailable ? (isLoggedin ? "Proceed to Payment" : "Login to continue") : "Not Available at the Moment"}</span>
               </button>
             </div>
           </form>

@@ -17,7 +17,7 @@ function Simulate() {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [user, setUser] =  useState();
+  const [user, setUser] = useState(null);
 
   const handlePaymentChange = (method) => {
     setPaymentMethod(method);
@@ -26,7 +26,7 @@ function Simulate() {
 
   const handleAgreeToTermsChange = (event) => {
     setAgreeToTerms(event.target.checked);
-    setPaymentSuccess(false); 
+    setPaymentSuccess(false);
   };
 
   const calculateDuration = (start, end) => {
@@ -36,41 +36,6 @@ function Simulate() {
     return durationInHours > 0 ? durationInHours : 0;
   };
 
-  const createBooking = () => {
-    const token = localStorage.getItem('authToken');
-
-    fetch("http://127.0.0.1:5000/create_booking", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify({
-          user_id:user,
-          space_id: parseInt(id),
-          start_time: startDate,
-          end_time: endDate,
-          total_amount: totalAmount
-      }),
-    })
-    .then(res => {
-      console.log('Response status:', res.status);
-      return res.json();
-    })
-    .then(data => {
-      // Logging data in the required format
-      console.log('Returned data:')
-
-      if (data.success) {
-          setPaymentSuccess(true);
-      } else {
-          console.error('Error creating booking:', data.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  };
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -90,7 +55,7 @@ function Simulate() {
         })
         .then(data => {
           if (data.id) {
-            setUser(data.id)
+            setUser(data.id);
           }
         })
         .catch(error => {
@@ -99,18 +64,106 @@ function Simulate() {
     }
   }, []);
 
+  const handleSubmit = () => {
+    fetch(`http://localhost:5000/spaces/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+            availability: false  // directly setting the availability to false
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert(`Error: ${data.error}`);
+        } else {
+            console.log("Space updated successfully!");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while updating the space.");
+    });
+  };
+
+  const createBooking = () => {
+    const token = localStorage.getItem('token');
+
+    fetch("http://127.0.0.1:5000/create_booking", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            user_id: user,
+            space_id: parseInt(id),
+            start_time: startDate,
+            end_time: endDate,
+            total_amount: totalAmount
+        }),
+    })
+    .then(res => {
+        console.log('Response status:', res.status);
+        return res.json();
+    })
+    .then(data => {
+        if (data.message) {
+            createPayment(); // Call createPayment here to handle payment
+        } else {
+            console.error('Error creating booking:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  };
+
+  const createPayment = () => {
+    const token = localStorage.getItem('token');
+
+    fetch("http://127.0.0.1:5000/create_payment", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            tax: tax,
+            amount: totalAmount,
+            booking_id: id
+        }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+        if (data.payment) {
+
+            setPaymentSuccess(true);
+            handleSubmit(); // Call handleSubmit here to update space availability
+        } else {
+            console.error('Error creating payment:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  };
+
   const handlePayButtonClick = () => {
     if (!paymentMethod) {
-      alert("Please select a payment method.");
-      return;
+        alert("Please select a payment method.");
+        return;
     }
     if (!agreeToTerms) {
-      alert("You must agree to the terms and conditions.");
-      return;
+        alert("You must agree to the terms and conditions.");
+        return;
     }
     
     alert(`Proceeding to payment with ${paymentMethod}...`);
-    setPaymentSuccess(true); 
     createBooking(); 
   };
 
