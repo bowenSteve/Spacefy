@@ -71,7 +71,9 @@ function Navbar() {
         alert("Something went wrong");
       });
   }
-
+function handleServices(){
+  navigate("/services")
+}
   return (
     <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -85,7 +87,7 @@ function Navbar() {
               <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" href="#services">Services</a>
+              <a className="nav-link main-text" aria-current="page" onClick={handleServices}>Services</a>
             </li>
             <li className="nav-item">
               <a className="nav-link main-text" aria-current="page" href="#contact">Contact</a>
