@@ -9,7 +9,7 @@ from models import db, User, Agreement, Payment, UserRole, Booking, Space
 
 def create_users():
     users = [
-        User(first_name='Abdulhakim', second_name='Kullow', email='john.doe@example.com', password_hash=generate_password_hash('password123'), is_admin=True),
+        User(first_name='Abdulhakim', second_name='Kullow', email='john.doe@example.com', password_hash=generate_password_hash('password123'), is_admin=True, is_owner = True),
         User(first_name='Jane', second_name='Smith', email='jane.smith@example.com', password_hash=generate_password_hash('password456')),
         User(first_name='Alice', second_name='Johnson', email='alice.johnson@example.com', password_hash=generate_password_hash('password789')),
     ]
@@ -95,7 +95,7 @@ def create_spaces(users):
             daily_price=70.0,
             owner_id=users[2].id,
             availability=True,
-            capacity=1,
+            capacity=30,
             image_url='https://images.unsplash.com/photo-1503423571797-2d2bb372094a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             location='Nairobi',
             special_features=['Wi-Fi', 'Coffee']
@@ -167,6 +167,7 @@ def create_bookings(users, spaces):
     return bookings  # Ensure that the list of bookings is returned
 
 
+
 def seed_data():
     print("Deleting data...")
     Booking.query.delete()
@@ -184,6 +185,7 @@ def seed_data():
     bookings = create_bookings(users, spaces)  # Create bookings and get them
     create_payments(users, bookings)  # Pass both users and bookings to create_payments
     create_roles(users)
+
 
 if __name__ == '__main__':
     with app.app_context():

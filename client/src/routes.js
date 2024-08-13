@@ -11,6 +11,7 @@ import Agreement from "./components/Agreement";
 import ContactPage from "./components/ContactPage";
 
 
+
 const routes = [
 
     {
@@ -60,7 +61,6 @@ const routes = [
         path:"/services",
         element:<Services/>
     }
-
 
 ]
 export default routes;

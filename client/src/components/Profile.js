@@ -4,6 +4,7 @@ import ProfileContent from "./ProfileContent";
 import BookingsContent from "./BookingsContent";
 import SpacesContent from "./SpaceContent";
 import Footer from './Footer';
+import Admin from './Admin';
 
 function Profile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,12 +23,13 @@ function Profile() {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("No user is Logged in");
+          throw new Error("No user is logged in");
         }
         return res.json();
       })
       .then((data) => {
         setUser(data);
+        console.log(data);
       })
       .catch((err) => {
         setError(err.message);
@@ -45,16 +47,19 @@ function Profile() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'Profile':
-        return <ProfileContent user={user}/>;
+        return <ProfileContent user={user} />;
       case 'Bookings':
-        return <BookingsContent user={user}/>;
+        return <BookingsContent user={user} />;
       case 'Spaces':
-        return user.role ? <SpacesContent user={user}/> : <div>Access Denied</div>;
+        return (user.role || user.owner) ? <SpacesContent user={user} /> : <div>Access Denied</div>;
+      case 'Admin':
+        return user.owner ? <Admin user={user} /> : <div>Access Denied</div>;
       default:
-        return <ProfileContent user={user}/>;
+        return <ProfileContent user={user} />;
     }
   };
 
@@ -83,14 +88,26 @@ function Profile() {
                 Bookings
               </button>
             </li>
-            <li>
-              <button
-                className={`btn ${activeSection === 'Spaces' ? 'btn-primary' : 'btn-outline-primary'}`}
-                onClick={() => setActiveSection('Spaces')}
-              >
-                Spaces
-              </button>
-            </li>
+            {(user.role || user.owner) && (
+              <li style={{ marginBottom: '10px' }}>
+                <button
+                  className={`btn ${activeSection === 'Spaces' ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setActiveSection('Spaces')}
+                >
+                  Spaces
+                </button>
+              </li>
+            )}
+            {user.owner && (
+              <li style={{ marginBottom: '10px' }}>
+                <button
+                  className={`btn ${activeSection === 'Admin' ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setActiveSection('Admin')}
+                >
+                  Admin
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -98,16 +115,15 @@ function Profile() {
       <div
         className="container mt-5"
         style={{ flex: 1, marginLeft: isMenuOpen ? '250px' : '80px' }}
-      > 
-        <p>hello</p>
+      >
         {renderContent()}
       </div>
       <div className="page-container">
-  <div className="content-wrap">
-  </div>
-  <Footer />
-</div>
-</div>
+        <div className="content-wrap">
+        </div>
+        <Footer />
+      </div>
+    </div>
   );
 }
 
