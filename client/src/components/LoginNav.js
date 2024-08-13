@@ -2,12 +2,10 @@
 import { Link,useNavigate } from "react-router-dom";
 
 function Navbar(){
+
   const navigate = useNavigate()
-  function handleServices(){
-    navigate("/services")
-  }
-  function handleContact (){
-    navigate("/contact")
+
+
 
 
     return (
@@ -23,10 +21,14 @@ function Navbar(){
               <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" onClick={handleServices}>Services</a>
+            <Link to={"/services"} className="link-color">
+              <a className="nav-link main-text" aria-current="page" >Services</a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" onClick={handleContact}>Contact</a>
+            <Link to={"/contact"} className="link-color">
+              <a className="nav-link main-text" aria-current="page" >Contact</a>
+              </Link>
             </li>
           </ul>
         </div>

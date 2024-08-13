@@ -52,7 +52,7 @@ function Navbar() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(res => res.json())
@@ -70,16 +70,8 @@ function Navbar() {
         console.error("Error logging out:", error);
         alert("Something went wrong");
       });
-
   }
-function handleServices(){
-  navigate("/services")
-}
 
-  }  
-   function handleContact (){
-    navigate("/contact")
-   }
 
 
   return (
@@ -89,24 +81,32 @@ function handleServices(){
         <div className="collapse navbar-collapse justify-content-center" id="navbarExample01">
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item active">
-            <Link to={"/"} className="link-color"> <a className="nav-link main-text" aria-current="page" href="#home">Home</a></Link>
+              <Link to={"/"} className="link-color">
+                <span className="nav-link main-text" aria-current="page">Home</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
+              <span className="nav-link main-text" aria-current="page" href="#about">About Us</span>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" onClick={handleServices}>Services</a>
+            <Link to={"/services"} className="link-color">
+              <span className="nav-link main-text" aria-current="page" >Services</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" onClick={handleContact} >Contact</a>
+            <Link to={"/contact"} className="link-color">
+              <span className="nav-link main-text" aria-current="page" >Contact</span>
+              </Link>
             </li>
           </ul>
         </div>
         {isLoggedIn && (
-          <Link to={"/profile"}><span className="navbar-text me-3 main-text link-color profile-btn">
-            <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2" />
-            <span>{firstName}</span>
-          </span></Link>
+          <Link to={"/profile"}>
+            <span className="navbar-text me-3 main-text link-color profile-btn">
+              <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2" />
+              <span>{firstName}</span>
+            </span>
+          </Link>
         )}
         <button className="btn btn-outline-light navbtn me-0" onClick={handleLogin}>
           <span>{isLoggedIn ? "Logout" : "Login"}</span>
