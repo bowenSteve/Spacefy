@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:password@localhost/app1_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@host:5432/app1_db_cwni"
 app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
