@@ -13,6 +13,7 @@ function SpaceCard() {
   const [rate, setRate] = useState(0);
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
+  const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +29,22 @@ function SpaceCard() {
         console.error('Error fetching space:', error);
       });
   }, [id, startDate, endDate]);
+  
+  useEffect(() => {
+    fetch(`http://localhost:5000/get_bookings/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        // Ensure data.bookings is an array
+        if (Array.isArray(data.bookings)) {
+          setBookings(data.bookings);
+        } else {
+          console.error('Bookings data is not an array:', data.bookings);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching bookings:', error);
+      });
+  }, [id]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -84,7 +101,8 @@ function SpaceCard() {
 
   const handlePayButtonClick = () => {
     if (!isAvailable) {
-      alert("This space is not available currently.");
+      // Navigate to the main page when the space is not available
+      navigate('/');
       return;
     }
 
@@ -106,10 +124,28 @@ function SpaceCard() {
     });
   };
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   if (!space) {
     return <div>Space not found</div>;
   }
 
+  // Extract end times from bookings
+  const endTimes = bookings.map(booking => {
+
+    return formatDateTime(booking.end_time); // Adjust to correct property
+  });
+
+  console.log('Bookings:', bookings);
+  
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
@@ -117,6 +153,7 @@ function SpaceCard() {
         <div className="row">
           <div className="col-md-6">
             <h1>{space.name}</h1>
+       
             <p className="mb-4"><strong>Special Features:</strong></p>
             <ul className="mb-4">
               {space.special_features.map((feature, index) => (
@@ -128,6 +165,7 @@ function SpaceCard() {
             <p className="mb-4"><strong>Capacity:</strong> {space.capacity}</p>
             <p className="mb-4"><strong>Location:</strong> {space.location}</p>
             <p className="mb-4"><strong>Rate:</strong> ${space.hourly_price}</p>
+            <h3>Not Available until: {endTimes.length ? endTimes[endTimes.length - 1] : 'N/A'}</h3>
           </div>
           <div className="col-md-6">
             <img src={space.image_url} alt={space.name} className="img-fluid" />
@@ -164,9 +202,9 @@ function SpaceCard() {
                 type="button"
                 className="btn book-btn2"
                 onClick={handlePayButtonClick}
-                disabled={!isAvailable}
+               
               >
-                <span>{isAvailable ? (isLoggedin ? "Proceed to Payment" : "Login to continue") : "Not Available at the Moment"}</span>
+                <span>{isAvailable ? (isLoggedin ? "Proceed to Payment" : "Login to continue") : "Back to Main Page"}</span>
               </button>
             </div>
           </form>

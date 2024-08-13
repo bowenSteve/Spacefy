@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import LoginNav from "./LoginNav";
-import "../styling/login.css";
+// import "../styling/login.css";
 
-// Define validation schema with Yup
 const validationSchema = Yup.object({
   email: Yup.string()
     .email('Invalid email address')
@@ -16,7 +15,6 @@ const validationSchema = Yup.object({
 function LoginPage() {
   const navigate = useNavigate();
 
-  // Handle form submission
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
     fetch("http://127.0.0.1:5000/login", {
       method: "POST",
@@ -45,7 +43,7 @@ function LoginPage() {
       <LoginNav />
       <div className="login-container">
         <div className="login-card">
-          <h2>Welcome</h2>
+          <h2 className='text-color'>Welcome</h2>
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
@@ -54,7 +52,7 @@ function LoginPage() {
             {({ isSubmitting }) => (
               <Form>
                 <div className="form-group">
-                  <label>Email</label>
+                  <label className='text-color'>Email</label>
                   <Field
                     type="email"
                     name="email"
@@ -63,7 +61,7 @@ function LoginPage() {
                   <ErrorMessage name="email" component="div" className="error-message" />
                 </div>
                 <div className="form-group">
-                  <label>Password</label>
+                  <label className='text-color'>Password</label>
                   <Field
                     type="password"
                     name="password"
@@ -74,15 +72,14 @@ function LoginPage() {
                 <button type="submit" className='button-log' disabled={isSubmitting}>
                   {isSubmitting ? "Loading..." : "LOGIN"}
                 </button>
-                {/* Display general errors */}
                 <div className="error-messages">
                   <ErrorMessage name="general" component="div" className="error-message" />
                 </div>
               </Form>
             )}
           </Formik>
-          <div className="signup-link">
-            Don't have an account? <a href="/signup">Sign Up</a>
+          <div className="signup-link ">
+            <span className='text-color'>Don't have an account?</span> <a href="/signup">Sign Up</a>
           </div>
         </div>
       </div>

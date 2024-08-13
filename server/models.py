@@ -13,6 +13,7 @@ class User(db.Model):
     email = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.Text, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_owner = db.Column(db.Boolean, default=False)
 
     agreements = relationship('Agreement', back_populates='user')
     payments = relationship('Payment', back_populates='user')
@@ -21,6 +22,8 @@ class User(db.Model):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+    def add_password(self, password):
+        self.password_hash = password
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -60,12 +63,11 @@ class Payment(db.Model):
     tax = db.Column(db.Float, nullable=False, default=0)
     amount = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.id', ondelete='CASCADE'), nullable=False)
     
     user = relationship('User', back_populates='payments')
-    booking = relationship('Booking', back_populates='payments')  # Updated to match the Booking model
+    booking = relationship('Booking', back_populates='payments')
 
-        
     def to_dict(self):
         return {
             'id': self.id,
@@ -87,9 +89,9 @@ class Payment(db.Model):
             }
         }
 
-    
     def __repr__(self):
         return f'<Payment {self.id}>'
+
 
 
     
@@ -113,11 +115,12 @@ class Booking(db.Model):
     end_time = db.Column(db.String, nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
     booking_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    
+
+    # Relationships
     user = relationship('User', back_populates='bookings')
     space = relationship('Space', back_populates='bookings')
-    payments = db.relationship('Payment', back_populates='booking', uselist=True)  # Changed backref to 'booking'
-    
+    payments = db.relationship('Payment', back_populates='booking', cascade='all, delete-orphan')
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -129,9 +132,11 @@ class Booking(db.Model):
             'total_amount': self.total_amount,
             'booking_date': self.booking_date.isoformat()
         }
-    
+
     def __repr__(self):
         return f'<Booking {self.id}>'
+
+
 
   
 

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e3263e9a97a9
+Revision ID: 3c0b546ee064
 Revises: 
-Create Date: 2024-08-11 17:55:48.248437
+Create Date: 2024-08-12 20:01:26.109641
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'e3263e9a97a9'
+revision = '3c0b546ee064'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,6 +25,15 @@ def upgrade():
     sa.Column('email', sa.String(length=50), nullable=False),
     sa.Column('password_hash', sa.Text(), nullable=False),
     sa.Column('national_id', sa.LargeBinary(), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
+    )
+    op.create_table('owner',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('first_name', sa.String(length=50), nullable=False),
+    sa.Column('second_name', sa.String(length=50), nullable=False),
+    sa.Column('email', sa.String(length=50), nullable=False),
+    sa.Column('password_hash', sa.Text(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -88,7 +97,7 @@ def upgrade():
     sa.Column('amount', sa.Float(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('booking_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['booking_id'], ['booking.id'], ),
+    sa.ForeignKeyConstraint(['booking_id'], ['booking.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -103,5 +112,6 @@ def downgrade():
     op.drop_table('space')
     op.drop_table('agreement')
     op.drop_table('user')
+    op.drop_table('owner')
     op.drop_table('admin')
     # ### end Alembic commands ###

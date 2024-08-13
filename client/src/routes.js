@@ -10,6 +10,7 @@ import Profile from "./components/Profile"
 import Agreement from "./components/Agreement";
 
 
+
 const routes = [
 
     {
@@ -50,7 +51,6 @@ const routes = [
         element:<Agreement />
 
     }
-
 
 ]
 export default routes;

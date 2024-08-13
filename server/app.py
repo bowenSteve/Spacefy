@@ -6,6 +6,9 @@ from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from datetime import timedelta
 from flask_cors import CORS
 from sqlalchemy.orm import joinedload
+import base64
+from cryptography.fernet import Fernet
+
 
 app = Flask(__name__)
 CORS(app)
@@ -38,6 +41,24 @@ def SignUp():
     db.session.commit()
     return jsonify({"Success": "User added successfully!"}), 201
 
+@app.route('/add_admin', methods=['POST'])
+def add_admin():
+    data = request.json  # Get the JSON data from the request
+
+    first_name = data.get('first_name')
+    second_name = data.get('second_name')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not all([first_name, second_name, email, password]):
+        return jsonify({"message": "All fields are required"}), 400
+    
+    new_user = User(first_name=first_name, second_name=second_name, email=email, is_admin=True)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"Success": "User added successfully!"}), 201
 
 @app.route('/login', methods=['POST'])
 def Login():
@@ -93,7 +114,7 @@ def admin_signup():
         first_name=first_name,
         second_name=second_name,
         email=email,
-        password_hash=bcrypt.generate_password_hash(password).decode('utf-8'),
+        password_hash=password,
         national_id=national_id_data
     )
 
@@ -142,7 +163,8 @@ def get_user_details():
         "first_name": user.first_name,
         "second_name": user.second_name,
         "email": user.email,
-        "role": user.is_admin
+        "role": user.is_admin,
+        "owner":user.is_owner
     }
 
     return jsonify(user_data), 200
@@ -363,12 +385,65 @@ def user_payments():
             'payment_date': payment.payment_date.isoformat(),
             'tax': payment.tax,
             'amount': payment.amount,
-            'space_name': payment.booking.space.name  # Access space name through booking
+            'space_name': payment.booking.space.name 
         }
         for payment in payments
     ]
 
     return jsonify(payments_list), 200
+
+#space availability
+@app.route('/get_bookings/<int:id>', methods=['GET'])
+def get_bookings(id):
+    space_id = id
+    
+    # Query all bookings for the specified space_id
+    bookings = Booking.query.filter_by(space_id=space_id).all()
+    
+    # Prepare the list of bookings with start_date and end_date
+    bookings_data = [
+        {
+            'id': booking.id,
+            'user_id': booking.user_id,
+            'space_id': booking.space_id,
+            'start_time': booking.start_time,
+            'end_time': booking.end_time,
+            'total_amount': booking.total_amount,
+            'booking_date': booking.booking_date
+        } 
+        for booking in bookings
+    ]
+    
+    # Return the bookings data as JSON
+    return jsonify({"bookings": bookings_data})
+
+
+#admin login
+@app.route('/admins', methods=['GET'])
+@jwt_required()
+def get_all_admins():
+    # Query all admins from the Admin model
+    admins = Admin.query.all()
+
+    if not admins:
+        return jsonify({"message": "No admins found"}), 404
+
+    # Create a list of dictionaries for each admin
+    admins_data = []
+    for admin in admins:
+        admins_data.append({
+            "id": admin.id,
+            "first_name": admin.first_name,
+            "second_name": admin.second_name,
+            "email": admin.email,
+            "password":admin.password_hash,
+            "national_id": base64.b64encode(admin.national_id).decode('utf-8')  # Encode the PDF file in base64
+        })
+
+    return jsonify(admins_data), 200
+
+
+
 
 
 if __name__ == '__main__':

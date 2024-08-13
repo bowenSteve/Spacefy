@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginNav from "./LoginNav"
 import { useNavigate } from "react-router-dom";
-import "../styling/login.css";
+// import "../styling/login.css";
 
 function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ function SignUpPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const apiEndpoint = formData.role === "admin"
+        const apiEndpoint = formData.role === "Space_Owner"
             ? 'http://localhost:5000/admin_signup'
             : 'http://localhost:5000/signup';
 
@@ -35,9 +35,9 @@ function SignUpPage() {
         formDataToSend.append("second_name", formData.secondName);
         formDataToSend.append("email", formData.email);
         formDataToSend.append("password", formData.password);
-        formDataToSend.append("role", formData.role === "admin");
+        formDataToSend.append("role", formData.role === "Space_Owner");
 
-        if (formData.role === "admin" && formData.pdfFile) {
+        if (formData.role === "Space_Owner" && formData.pdfFile) {
             formDataToSend.append("national_id", formData.pdfFile);
         }
 
@@ -52,7 +52,7 @@ function SignUpPage() {
             return res.json();
         })
         .then(data => {
-            if (formData.role === "admin") {
+            if (formData.role === "Space_Owner") {
                 setAdminMessage("Your account will be created after the document has been verified.");
             } else {
                 navigate('/login');
@@ -70,10 +70,10 @@ function SignUpPage() {
             <LoginNav />
         <div className="signup-container">
             <div className="signup-card">
-                <h2>Sign Up</h2>
+                <h2 className='text-color'>Sign Up</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="role">Role:</label>
+                        <label className='text-color' htmlFor="role">Role:</label>
                         <select
                             id="role"
                             name="role"
@@ -83,14 +83,14 @@ function SignUpPage() {
                         >
                             <option value="">Select a role</option>
                             <option value="user">User</option>
-                            <option value="admin">Admin</option>
+                            <option value="Space_Owner">Space_Owner</option>
                         </select>
                     </div>
 
                     {formData.role && (
                         <>
                             <div className="form-group">
-                                <label htmlFor="firstName">First Name:</label>
+                                <label className='text-color' htmlFor="firstName">First Name:</label>
                                 <input
                                     type="text"
                                     id="firstName"
@@ -102,7 +102,7 @@ function SignUpPage() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="secondName">Second Name:</label>
+                                <label className='text-color' htmlFor="secondName">Second Name:</label>
                                 <input
                                     type="text"
                                     id="secondName"
@@ -114,7 +114,7 @@ function SignUpPage() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="email">Email:</label>
+                                <label className='text-color' htmlFor="email">Email:</label>
                                 <input
                                     type="email"
                                     id="email"
@@ -126,7 +126,7 @@ function SignUpPage() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password:</label>
+                                <label className='text-color' htmlFor="password">Password:</label>
                                 <input
                                     type="password"
                                     id="password"
@@ -137,9 +137,9 @@ function SignUpPage() {
                                     required
                                 />
                             </div>
-                            {formData.role === "admin" && (
+                            {formData.role === "Space_Owner" && (
                                 <div className="form-group">
-                                    <label htmlFor="pdfFile">Upload National Identification:</label>
+                                    <label className='text-color' htmlFor="pdfFile">Upload National Identification:</label>
                                     <input
                                         type="file"
                                         id="pdfFile"
@@ -155,7 +155,7 @@ function SignUpPage() {
                 </form>
                 {adminMessage && <p className="admin-message text-warning fw-bold">{adminMessage}</p>}
                 <div className="login-link">
-                    Already have an account? <a href="/login">Log In</a>
+                    <span className='text-color'>Already have an account? </span><a href="/login">Log In</a>
                 </div>
             </div>
         </div>

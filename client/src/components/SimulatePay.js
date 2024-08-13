@@ -191,8 +191,8 @@ function Simulate() {
               <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Mpesa')}>
                 Mpesa
               </button>
-              <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Others')}>
-                Others
+              <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Airtel-Money')}>
+                Airtel-Money
               </button>
             </div>
 
@@ -228,13 +228,13 @@ function Simulate() {
               </div>
             )}
 
-            {paymentMethod === 'Others' && (
+{paymentMethod === 'Airtel-Money' && (
               <div className="payment-form">
-                <h3>Other Payment Information</h3>
+                <h3>Airtel-Money Information</h3>
                 <form>
                   <div className="mb-3">
-                    <label htmlFor="other-method" className="form-label">Method</label>
-                    <input type="text" className="form-control" id="other-method" placeholder="Specify method" />
+                    <label htmlFor="airtel-number" className="form-label">Airtel-Money Number</label>
+                    <input type="text" className="form-control" id="mpesa-number" placeholder="07XX XXX XXX" />
                   </div>
                 </form>
               </div>
