@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import LoginNav from "./LoginNav";
-// import "../styling/login.css";
+import "../styling/login.css";
 
 const validationSchema = Yup.object({
   email: Yup.string()
