@@ -10,6 +10,7 @@ flask-jwt-extended = "*"
 flask-cors = "*"
 psycopg2 = "*"
 cryptography = "*"
+auth0-python = "*"
 
 [dev-packages]
 

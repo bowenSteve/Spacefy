@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useAuth0 } from "@auth0/auth0-react";
 import LoginNav from "./LoginNav";
 import "../styling/login.css";
 
@@ -13,7 +15,14 @@ const validationSchema = Yup.object({
 });
 
 function LoginPage() {
+  const { loginWithPopup, isAuthenticated, user, getIdToken } = useAuth0();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
     fetch("http://127.0.0.1:5000/login", {
@@ -36,6 +45,20 @@ function LoginPage() {
           });
         }
       });
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithPopup({ connection: 'google-oauth2' });
+      // After successful login, get the ID token and save it to local storage
+      const idToken = await getIdToken();
+      localStorage.setItem('auth0_id_token', idToken); // Save token in local storage
+      console.log("ID Token:", idToken);
+      console.log("User Info:", user);
+      navigate("/");
+    } catch (error) {
+      console.error("Login with Google failed:", error);
+    }
   };
 
   return (
@@ -78,7 +101,14 @@ function LoginPage() {
               </Form>
             )}
           </Formik>
-          <div className="signup-link ">
+          <button
+            type="button"
+            className='button-google'
+            onClick={handleGoogleLogin}
+          >
+            Login with Google
+          </button>
+          <div className="signup-link">
             <span className='text-color'>Don't have an account?</span> <a href="/signup">Sign Up</a>
           </div>
         </div>

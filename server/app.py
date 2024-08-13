@@ -10,6 +10,7 @@ import base64
 from cryptography.fernet import Fernet
 
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -19,10 +20,11 @@ app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 10000
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
 
+
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
+from .models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
 migrate = Migrate(app, db)
 db.init_app(app)
 

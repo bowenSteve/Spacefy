@@ -5,15 +5,38 @@ import BookingsContent from "./BookingsContent";
 import SpacesContent from "./SpaceContent";
 import Footer from './Footer';
 import Admin from './Admin';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Profile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('Profile');
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const fetchToken = async () => {
+      if (isAuthenticated) {
+        // Get Auth0 token if authenticated
+        try {
+          const accessToken = await getAccessTokenSilently();
+          setToken(accessToken);
+        } catch (error) {
+          console.error("Failed to get Auth0 token", error);
+        }
+      } else {
+        // Get local token if not authenticated with Auth0
+        const localToken = localStorage.getItem("token");
+        setToken(localToken);
+      }
+    };
+
+    fetchToken();
+  }, [isAuthenticated, getAccessTokenSilently]);
+
+  useEffect(() => {
+    if (!token) return;
 
     fetch("http://127.0.0.1:5000/user_details", {
       method: "GET",
@@ -34,7 +57,7 @@ function Profile() {
       .catch((err) => {
         setError(err.message);
       });
-  }, []);
+  }, [token]);
 
   if (error) {
     return <div>Error: {error}</div>;
