@@ -1,11 +1,14 @@
-import { useNavigate, Link } from "react-router-dom";
 
+import { Link,useNavigate } from "react-router-dom";
 
 function Navbar(){
-const navigate = useNavigate()
+  const navigate = useNavigate()
+  function handleServices(){
+    navigate("/services")
+  }
   function handleContact (){
     navigate("/contact")
-   }
+
 
     return (
         <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
@@ -20,7 +23,7 @@ const navigate = useNavigate()
               <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" href="#services">Services</a>
+              <a className="nav-link main-text" aria-current="page" onClick={handleServices}>Services</a>
             </li>
             <li className="nav-item">
               <a className="nav-link main-text" aria-current="page" onClick={handleContact}>Contact</a>
