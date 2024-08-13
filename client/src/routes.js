@@ -6,8 +6,9 @@ import SignUp from "./components/SignUP"
 import Payment from "./components/Payment"
 import SimulatePay from "./components/SimulatePay";
 import Profile from "./components/Profile"
-
+import Services from "./components/Services";
 import Agreement from "./components/Agreement";
+import ContactPage from "./components/ContactPage";
 
 
 
@@ -47,9 +48,18 @@ const routes = [
 
     },
     {
+        path:"/contact",
+        element:<ContactPage />
+
+    },
+    {
         path:"/agreement",
         element:<Agreement />
 
+    },
+    {
+        path:"/services",
+        element:<Services/>
     }
 
 ]

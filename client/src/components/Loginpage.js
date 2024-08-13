@@ -82,6 +82,9 @@ function LoginPage() {
             <span className='text-color'>Don't have an account?</span> <a href="/signup">Sign Up</a>
           </div>
         </div>
+        <div className="login-image">
+          <img src="https://media.istockphoto.com/id/2153740552/photo/digital-person-identity-concept-with-touch-screen-biometrics-security-by-fingerprint-abstract.webp?b=1&s=170667a&w=0&k=20&c=Sl72tua1ViH3GDZyycpsFwKCDvaHV8cbN86kl6HtOTE=" alt="Login pic" />
+        </div>
       </div>
     </div>
   );
