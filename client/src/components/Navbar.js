@@ -70,7 +70,10 @@ function Navbar() {
         console.error("Error logging out:", error);
         alert("Something went wrong");
       });
-  }
+  }  
+   function handleContact (){
+    navigate("/contact")
+   }
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
@@ -88,7 +91,7 @@ function Navbar() {
               <a className="nav-link main-text" aria-current="page" href="#services">Services</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link main-text" aria-current="page" href="#contact">Contact</a>
+              <a className="nav-link main-text" aria-current="page" onClick={handleContact} >Contact</a>
             </li>
           </ul>
         </div>
