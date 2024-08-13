@@ -1,0 +1,56 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .contact-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('https://dibastudio.co.ke/wp-content/uploads/2023/05/MG_9053-HDR-768x512.jpg') no-repeat center center/cover;
+  }
+  
+  .contact-content {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5); 
+    padding: 13rem;
+    border-radius: 8px;
+    max-width: 1500px;
+    width: 100%;
+  }
+  
+  h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+  
+  .contact-info {
+    margin-bottom: 1.5rem;
+  }
+  
+  .contact-info p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .social-icons a {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+  
+  .social-icons a:hover {
+    color: #007bff;
+  }
+  
+  
