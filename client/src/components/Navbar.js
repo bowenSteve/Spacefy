@@ -8,7 +8,7 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // For local authentication
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
-  const { logout: auth0Logout, isAuthenticated, user: auth0User } = useAuth0(); // Auth0 hook
+  const { logout: auth0Logout, isAuthenticated, user: auth0User, getIdTokenClaims } = useAuth0(); // Auth0 hook
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,6 +44,38 @@ function Navbar() {
       setFirstName("");
     }
   }, [isAuthenticated, auth0User]);
+
+  // Send user data to google_login endpoint when authenticated
+  useEffect(() => {
+    const sendGoogleLoginData = async () => {
+      if (isAuthenticated && auth0User) {
+        try {
+          const idToken = await getIdTokenClaims(); // Get the ID token
+          const response = await fetch("http://127.0.0.1:5000/google_login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${idToken.__raw}` // Use ID token as Bearer token
+            },
+            body: JSON.stringify({ email: auth0User.email }),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.access_token); // Store the JWT token in localStorage
+          } else {
+            const err = await response.json();
+            console.error("Error:", err);
+          }
+        } catch (error) {
+          console.error("Error sending Google login data:", error);
+        }
+      }
+    };
+  
+    sendGoogleLoginData();
+  }, [isAuthenticated, auth0User, getIdTokenClaims]);
+  
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -115,7 +147,7 @@ function Navbar() {
         {isLoggedIn && (
           <Link to={"/profile"}>
             <span className="navbar-text me-3 main-text link-color profile-btn">
-              <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2" />
+              <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2 main-text" id="svg"/>
               <span>{firstName}</span>
             </span>
           </Link>

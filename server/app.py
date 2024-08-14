@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@dpg-cqtovtlds78s739r3r7g-a:5432/app1_db_cwni"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:password@localhost/app1_db"
 app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
@@ -24,7 +24,7 @@ app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 10000000000
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from .models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
+from models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
 migrate = Migrate(app, db)
 db.init_app(app)
 
@@ -61,6 +61,24 @@ def add_admin():
     db.session.commit()
     
     return jsonify({"Success": "User added successfully!"}), 201
+
+#login
+@app.route('/google_login', methods=['POST'])
+def google_login():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"msg": "Email is required"}), 400
+
+    # Check if user exists in the database
+    user = User.query.filter_by(email=email).first()
+
+
+    # Generate token
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"access_token": access_token}), 200
+
 
 @app.route('/login', methods=['POST'])
 def Login():
@@ -439,7 +457,8 @@ def get_all_admins():
             "second_name": admin.second_name,
             "email": admin.email,
             "password":admin.password_hash,
-            "national_id": base64.b64encode(admin.national_id).decode('utf-8')  # Encode the PDF file in base64
+            "national_id": base64.b64encode(admin.national_id).decode('utf-8'),  # Encode the PDF file in base64
+            "closed":admin.closed
         })
 
     return jsonify(admins_data), 200

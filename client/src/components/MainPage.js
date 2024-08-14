@@ -11,7 +11,7 @@ function MainPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://spacefy.onrender.com/spaces')
+    fetch('http://127.0.0.1:5000/spaces')
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
