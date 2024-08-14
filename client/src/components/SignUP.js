@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styling/signin.css";
+import LoginNav from "./LoginNav";
 
 function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -65,6 +66,8 @@ function SignUpPage() {
     };
 
     return (
+        <div>
+        <LoginNav />
         <div className="signup-container">
             <div className="signup-card">
                 <h2 className='text-color'>Sign Up</h2>
@@ -136,7 +139,7 @@ function SignUpPage() {
                             </div>
                             {formData.role === "Space_Owner" && (
                                 <div className="form-group">
-                                    <label className='text-color' htmlFor="pdfFile">Upload National Identification:</label>
+                                    <label className='text-color file' htmlFor="pdfFile">Upload National Identification:</label>
                                     <input
                                         type="file"
                                         id="pdfFile"
@@ -155,9 +158,8 @@ function SignUpPage() {
                     <span className='text-color'>Already have an account? </span><a href="/login">Log In</a>
                 </div>
             </div>
-            <div className="signup-image">
-                <img src="https://images.unsplash.com/photo-1603796846097-bee99e4a601f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2lnbmluZyUyMHBhcGVyc3xlbnwwfHwwfHx8MA%3D%3D" alt="Sign Up" />
-            </div>
+          
+        </div>
         </div>
     );
 }

@@ -18,7 +18,9 @@ function Navbar(){
               <Link to={"/"} className="link-color" ><a className="nav-link main-text" aria-current="page" href="#home">Home</a></Link>
             </li>
             <li className="nav-item">
+            <Link to={"/aboutus"} className="link-color">
               <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
+              </Link>
             </li>
             <li className="nav-item">
             <Link to={"/services"} className="link-color">

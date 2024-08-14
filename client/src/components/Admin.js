@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 
 function Admin() {
@@ -76,13 +75,13 @@ function Admin() {
         })
         .catch((err) => {
           console.error(err);
-          setConfirmationMessage("Failed to add admin as a space owner.");
+          setConfirmationMessage("The space owner has already been added.");
         });
     }
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       {error && <p className="text-danger">{error}</p>}
       {confirmationMessage && <p className="text-success">{confirmationMessage}</p>}
       {admins.length > 0 ? (

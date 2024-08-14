@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // For local authentication
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
+  const { logout: auth0Logout, isAuthenticated, user: auth0User, getIdTokenClaims } = useAuth0(); // Auth0 hook
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -34,20 +36,64 @@ function Navbar() {
         .catch(error => {
           console.error("Error fetching current user:", error);
         });
+    } else if (isAuthenticated) {
+      setIsLoggedIn(true);
+      setFirstName(auth0User?.given_name || "User"); // Use Auth0 user details if available
+    } else {
+      setIsLoggedIn(false);
+      setFirstName("");
     }
-  }, []);
+  }, [isAuthenticated, auth0User]);
 
-  function handleLogin() {
+  // Send user data to google_login endpoint when authenticated
+  useEffect(() => {
+    const sendGoogleLoginData = async () => {
+      if (isAuthenticated && auth0User) {
+        try {
+          const idToken = await getIdTokenClaims(); // Get the ID token
+          const response = await fetch("http://127.0.0.1:5000/google_login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${idToken.__raw}` // Use ID token as Bearer token
+            },
+            body: JSON.stringify({ email: auth0User.email }),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.access_token); // Store the JWT token in localStorage
+          } else {
+            const err = await response.json();
+            console.error("Error:", err);
+          }
+        } catch (error) {
+          console.error("Error sending Google login data:", error);
+        }
+      }
+    };
+  
+    sendGoogleLoginData();
+  }, [isAuthenticated, auth0User, getIdTokenClaims]);
+  
+
+  const handleLogin = () => {
     if (isLoggedIn) {
       logout();
     } else {
       navigate("/login");
     }
-  }
+  };
 
-  function logout() {
+  const logout = () => {
     const token = localStorage.getItem('token');
 
+    // If using Auth0, logout from Auth0
+    if (isAuthenticated) {
+      auth0Logout({ returnTo: window.location.origin }); // Redirect to home page or login page
+    }
+
+    // Clear local authentication
     fetch('http://127.0.0.1:5000/logout', {
       method: 'POST',
       headers: {
@@ -70,9 +116,7 @@ function Navbar() {
         console.error("Error logging out:", error);
         alert("Something went wrong");
       });
-  }
-
-
+  };
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
@@ -89,13 +133,15 @@ function Navbar() {
               <span className="nav-link main-text" aria-current="page" href="#about">About Us</span>
             </li>
             <li className="nav-item">
-            <Link to={"/services"} className="link-color">
-              <span className="nav-link main-text" aria-current="page" >Services</span>
+            <Link to={"/"} className="link-color">
+              <Link to={"/aboutus"} className="link-color">
+                <span className="nav-link main-text" aria-current="page">Services</span>
+                </Link>
               </Link>
             </li>
             <li className="nav-item">
-            <Link to={"/contact"} className="link-color">
-              <span className="nav-link main-text" aria-current="page" >Contact</span>
+              <Link to={"/contact"} className="link-color">
+                <span className="nav-link main-text" aria-current="page">Contact</span>
               </Link>
             </li>
           </ul>
@@ -103,7 +149,7 @@ function Navbar() {
         {isLoggedIn && (
           <Link to={"/profile"}>
             <span className="navbar-text me-3 main-text link-color profile-btn">
-              <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2" />
+              <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2 main-text" id="svg"/>
               <span>{firstName}</span>
             </span>
           </Link>

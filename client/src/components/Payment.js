@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'; // Import default styles
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-function SpaceCard() {
+// Function to check if a date is highlighted
+const isHighlighted = (date, bookings) => {
+  return bookings.some(booking => {
+    const bookingStart = new Date(booking.start_time);
+    const bookingEnd = new Date(booking.end_time);
+    return date >= bookingStart && date <= bookingEnd;
+  });
+};
+
+function Payment(){
   const { id } = useParams();
   const [space, setSpace] = useState(null);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [tax, setTax] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [rate, setRate] = useState(0);
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [selectedDate, setSelectedDate] = useState([null, null]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,19 +34,17 @@ function SpaceCard() {
       .then(data => {
         setSpace(data);
         setRate(data.hourly_price);
-        calculateTaxAndTotal(data);
         setIsAvailable(data.availability);
       })
       .catch(error => {
         console.error('Error fetching space:', error);
       });
-  }, [id, startDate, endDate]);
-  
+  }, [id]);
+
   useEffect(() => {
     fetch(`http://localhost:5000/get_bookings/${id}`)
       .then(res => res.json())
       .then(data => {
-        // Ensure data.bookings is an array
         if (Array.isArray(data.bookings)) {
           setBookings(data.bookings);
         } else {
@@ -66,6 +76,7 @@ function SpaceCard() {
         .then(data => {
           if (data.id) {
             setIsLoggedin(true);
+            console.log(data)
           }
         })
         .catch(error => {
@@ -74,35 +85,45 @@ function SpaceCard() {
     }
   }, []);
 
-  const calculateTaxAndTotal = (space) => {
+  useEffect(() => {
+    if (startDate && endDate) {
+      calculateTaxAndTotal();
+    }
+  }, [startDate, endDate]);
+
+  const calculateTaxAndTotal = () => {
     const taxRate = 0.13;
-    const baseRate = Math.round(space.hourly_price || 0);
-    const duration = Math.round(calculateDuration(startDate, endDate));
-    const calculatedTax = Math.round(baseRate * duration * taxRate);
-    const calculatedAmount = Math.round(baseRate * duration);
+    const duration = calculateDuration(startDate, endDate);
+    const calculatedTax = Math.round(rate * duration * taxRate);
+    const calculatedAmount = Math.round(rate * duration);
     setTax(calculatedTax);
     setTotalAmount(calculatedAmount + calculatedTax);
   };
 
   const calculateDuration = (start, end) => {
+    if (!start || !end) return 0;
     const startDateTime = new Date(start);
     const endDateTime = new Date(end);
     const durationInHours = Math.round((endDateTime - startDateTime) / (1000 * 60 * 60));
     return durationInHours > 0 ? durationInHours : 0;
   };
 
-  const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
-  };
-
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
+  const handleDateChange = (dates) => {
+    if (dates.length === 2) {
+      setStartDate(dates[0]);
+      setEndDate(dates[1]);
+    } else {
+      setSelectedDate(dates);
+    }
   };
 
   const handlePayButtonClick = () => {
-    if (!isAvailable) {
-      // Navigate to the main page when the space is not available
-      navigate('/');
+    if (!isLoggedin) {
+      navigate("/login");
+      return;
+    }
+    if (!startDate || !endDate) {
+      console.log('Start date or end date is not set, please select dates');
       return;
     }
 
@@ -134,18 +155,15 @@ function SpaceCard() {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
+  // Disable highlighted dates
+  const tileDisabled = ({ date }) => {
+    return isHighlighted(date, bookings);
+  };
+
   if (!space) {
     return <div>Space not found</div>;
   }
 
-  // Extract end times from bookings
-  const endTimes = bookings.map(booking => {
-
-    return formatDateTime(booking.end_time); // Adjust to correct property
-  });
-
-  console.log('Bookings:', bookings);
-  
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
@@ -153,7 +171,6 @@ function SpaceCard() {
         <div className="row">
           <div className="col-md-6">
             <h1>{space.name}</h1>
-       
             <p className="mb-4"><strong>Special Features:</strong></p>
             <ul className="mb-4">
               {space.special_features.map((feature, index) => (
@@ -165,7 +182,6 @@ function SpaceCard() {
             <p className="mb-4"><strong>Capacity:</strong> {space.capacity}</p>
             <p className="mb-4"><strong>Location:</strong> {space.location}</p>
             <p className="mb-4"><strong>Rate:</strong> ${space.hourly_price}</p>
-            <h3>Not Available until: {endTimes.length ? endTimes[endTimes.length - 1] : 'N/A'}</h3>
           </div>
           <div className="col-md-6">
             <img src={space.image_url} alt={space.name} className="img-fluid" />
@@ -173,46 +189,51 @@ function SpaceCard() {
         </div>
         <div className="mt-auto">
           <h3>Book This Space</h3>
-          <form>
-            <div className="mb-3">
-              <label htmlFor="startDate" className="form-label">Start Date/Time</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                id="startDate"
-                value={startDate}
-                onChange={handleStartDateChange}
-              />
+          <div className="calendar-container">
+            <Calendar
+              selectRange
+              onChange={handleDateChange}
+              value={[startDate, endDate]}
+              tileClassName={({ date }) => isHighlighted(date, bookings) ? 'highlighted-date' : null}
+              tileDisabled={tileDisabled}
+              minDate={new Date()}
+            />
+            <style>
+              {`
+                .highlighted-date {
+                  background: #ffcc00 !important; /* Highlight color */
+                  color: #000 !important;
+                }
+                .react-calendar__tile--active {
+                  background: #00f !important;
+                  color: white !important;
+                }
+              `}
+            </style>
+          </div>
+          {startDate && endDate && (
+            <div>
+              <p className="mb-4"><strong>Start Date:</strong> {formatDateTime(startDate.toISOString())}</p>
+              <p className="mb-4"><strong>End Date:</strong> {formatDateTime(endDate.toISOString())}</p>
+              <p className="mb-4"><strong>Tax:</strong> ${Math.round(tax)}</p>
+              <p className="mb-4"><strong>Total Amount:</strong> ${Math.round(totalAmount)}</p>
             </div>
-            <div className="mb-3">
-              <label htmlFor="endDate" className="form-label">End Date/Time</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                id="endDate"
-                value={endDate}
-                onChange={handleEndDateChange}
-              />
-            </div>
-            <p className="mb-4"><strong>Tax:</strong> ${Math.round(tax)}</p>
-            <p className="mb-4"><strong>Total Amount:</strong> ${Math.round(totalAmount)}</p>
-            
-            <div className="d-flex justify-content-center">
-              <button
-                type="button"
-                className="btn book-btn2"
-                onClick={handlePayButtonClick}
-               
-              >
-                <span>{isAvailable ? (isLoggedin ? "Proceed to Payment" : "Login to continue") : "Back to Main Page"}</span>
-              </button>
-            </div>
-          </form>
+          )}
+          <div className="d-flex justify-content-center">
+            <button
+              type="button"
+              className="btn book-btn2"
+              onClick={handlePayButtonClick}
+              disabled={(!startDate || !endDate) && (isLoggedin)} // Disable button if dates are not selected
+            >
+              <span>{isLoggedin ? "Proceed to Payment" : "Login to continue"}</span>
+            </button>
+          </div>
         </div>
       </div>
       <Footer />
     </div>
   );
-}
+};
 
-export default SpaceCard;
+export default Payment;
