@@ -133,8 +133,10 @@ function Navbar() {
               <span className="nav-link main-text" aria-current="page" href="#about">About Us</span>
             </li>
             <li className="nav-item">
-              <Link to={"/services"} className="link-color">
+            <Link to={"/"} className="link-color">
+              <Link to={"/aboutus"} className="link-color">
                 <span className="nav-link main-text" aria-current="page">Services</span>
+                </Link>
               </Link>
             </li>
             <li className="nav-item">

@@ -9,7 +9,7 @@ import Profile from "./components/Profile"
 import Services from "./components/Services";
 import Agreement from "./components/Agreement";
 import ContactPage from "./components/ContactPage";
-
+import AboutUs from "./components/AboutUs"
 
 
 const routes = [
@@ -60,6 +60,10 @@ const routes = [
     {
         path:"/services",
         element:<Services/>
+    },
+    {
+        path:"/aboutus",
+        element:<AboutUs />
     }
 
 ]
