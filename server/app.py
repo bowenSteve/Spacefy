@@ -7,7 +7,6 @@ from datetime import timedelta
 from flask_cors import CORS
 from sqlalchemy.orm import joinedload
 import base64
-from cryptography.fernet import Fernet
 
 
 
