@@ -71,13 +71,23 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
-      <div className="container-fluid d-flex justify-content-between align-items-center">
-        <Link to={"/"} className="link-color"><h2 className="brand m-0 main-text">SPACEFY</h2></Link>
-   
-        <button className="btn main-button navbtn me-0" onClick={handleLogin}>
-          <span>{isLoggedIn ? "Logout" : "Login"}</span>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <div className="container-fluid">
+        <Link to="/" className="navbar-brand">
+          <h2 className="brand m-0">SPACEFY</h2>
+        </Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
         </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <button className="btn main-button navbtn" onClick={handleLogin}>
+                <span>{isLoggedIn ? "Logout" : "Login"}</span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );

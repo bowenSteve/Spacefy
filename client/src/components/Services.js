@@ -15,13 +15,13 @@ function Services() {
         <div>
             <Navbar />
             <header>
-        <img
-          src={main}
-          alt="Full Width"
-          className="img-fluid w-100"
-          style={{ width: '100%', height: '500px', objectFit: 'cover' }}
-        />
-      </header>
+                <img
+                    src={main}
+                    alt="Full Width"
+                    className="img-fluid"
+                    style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+                />
+            </header>
             <div className="container mt-5 pt-3">
                 <div className="row align-items-center mb-5">
                     <div className="col-md-6">
@@ -49,8 +49,8 @@ function Services() {
                         </p>
                     </div>
                 </div>
-                <div className="row justify-content-center">
-                    <div className="col-md-12 text-center">
+                <div className="row justify-content-center mb-5">
+                    <div className="col-md-10 col-lg-8 text-center">
                         <h2>Our Spaces</h2>
                         <div className="row align-items-center mb-5">
                             <div className="col-md-6">
@@ -64,8 +64,8 @@ function Services() {
                         </div>
                     </div>
                 </div>
-                <div className="row justify-content-center">
-                    <div className="col-md-12 text-center">
+                <div className="row justify-content-center mb-5">
+                    <div className="col-md-10 col-lg-8 text-center">
                         <div className="row align-items-center mb-5">
                             <div className="col-md-6 text-center">
                                 <img src={img3} alt="Spaces" className="img-fluid rounded mb-4" />
@@ -86,8 +86,8 @@ function Services() {
                         <img src={img4} alt="Spaces" className="img-fluid rounded mb-4" />
                     </div>
                 </div>
-                <div className="row justify-content-center">
-                    <div className="col-md-12 text-center">
+                <div className="row justify-content-center mb-5">
+                    <div className="col-md-10 col-lg-8 text-center">
                         <div className="row align-items-center mb-5">
                             <div className="col-md-6 text-center">
                                 <img src={img5} alt="Spaces" className="img-fluid rounded mb-4" />
