@@ -32,7 +32,7 @@ app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 10000000000
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
+from .models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
 migrate = Migrate(app, db)
 db.init_app(app)
 
