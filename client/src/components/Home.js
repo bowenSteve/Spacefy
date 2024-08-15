@@ -15,7 +15,7 @@ function Home() {
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
-        console.log(data)
+        console.log(data);
       })
       .catch(error => {
         console.error('Error fetching spaces:', error);
@@ -29,6 +29,7 @@ function Home() {
   function handleSearch(event) {
     setSearchTerm(event.target.value);
   }
+  
   function handleSpaceClick(id){
     navigate(`/space/${id}`);
   }
@@ -41,20 +42,22 @@ function Home() {
   return (
     <div>
       <Navbar />
-      {/* image area */}
+      
+      {/* Image area */}
       <header>
         <img
           src={image1}
           alt="Full Width"
           className="img-fluid w-100"
-          style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+          style={{ width: '100%', height: '50vh', objectFit: 'cover' }}
         />
       </header>
 
-      <main>
-        <h1 className="main mt-2">OUR MEETING ROOMS</h1>
-        <div className="dropdown-wrapper">
-          <div className="dropdown mb-4">
+      <main className="container mt-4">
+        <h1 className="main mt-2 text-center">OUR MEETING ROOMS</h1>
+        
+        <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
+          <div className="dropdown mb-2">
             <button className="btn btn-color dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               {selectedOption}
             </button>
@@ -64,7 +67,7 @@ function Home() {
               <li><a className="dropdown-item" href="#" onClick={() => handleSelect('Capacity')}>Capacity</a></li>
             </ul>
           </div>
-          <div className="search-wrapper">
+          <div className="search-wrapper mb-2">
             <input
               type="text"
               className="form-control"
@@ -74,25 +77,29 @@ function Home() {
             />
           </div>
         </div>
-        <div className="container">
-          <div className="row">
-            {filteredSpaces.map((space, index) => (
-              <div key={index} className="col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
-                <h2>{space.name}</h2>
-                <p><strong>Special Features:</strong></p>
-                <ul>
-                  {space.special_features.map((feature, i) => (
-                    <li key={i}>{feature}</li>
-                  ))}
-                </ul>
-                <p><strong>Capacity:</strong> {space.capacity}</p>
-                <p><strong>Location:</strong> {space.location}</p>
-                <img alt="image" src={space.image_url} className="space-image" />
+        
+        <div className="row">
+          {filteredSpaces.map((space, index) => (
+            <div key={index} className="col-lg-4 col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
+              <div className="card h-100">
+                <img alt="image" src={space.image_url} className="card-img-top space-image" />
+                <div className="card-body">
+                  <h2 className="card-title">{space.name}</h2>
+                  <p><strong>Special Features:</strong></p>
+                  <ul>
+                    {space.special_features.map((feature, i) => (
+                      <li key={i}>{feature}</li>
+                    ))}
+                  </ul>
+                  <p><strong>Capacity:</strong> {space.capacity}</p>
+                  <p><strong>Location:</strong> {space.location}</p>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </main>
+
       <Footer />
     </div>
   );
