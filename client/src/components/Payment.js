@@ -29,7 +29,7 @@ function Payment(){
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/spaces/${id}`)
+    fetch(`https://spacefy.onrender.com/spaces/${id}`)
       .then(res => res.json())
       .then(data => {
         setSpace(data);
@@ -42,7 +42,7 @@ function Payment(){
   }, [id]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/get_bookings/${id}`)
+    fetch(`https://spacefy.onrender.com/get_bookings/${id}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data.bookings)) {
@@ -60,7 +60,7 @@ function Payment(){
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch("http://127.0.0.1:5000/current_user", {
+      fetch("https://spacefy.onrender.com/current_user", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`

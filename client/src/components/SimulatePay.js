@@ -40,7 +40,7 @@ function Simulate() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch("http://127.0.0.1:5000/current_user", {
+      fetch("https://spacefy.onrender.com/current_user", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -65,7 +65,7 @@ function Simulate() {
   }, []);
 
   const handleSubmit = () => {
-    fetch(`http://localhost:5000/spaces/${id}`, {
+    fetch(`https://spacefy.onrender.com/spaces/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function Simulate() {
   const createBooking = () => {
     const token = localStorage.getItem('token');
 
-    fetch("http://127.0.0.1:5000/create_booking", {
+    fetch("https://spacefy.onrender.com/create_booking", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function Simulate() {
   const createPayment = () => {
     const token = localStorage.getItem('token');
 
-    fetch("http://127.0.0.1:5000/create_payment", {
+    fetch("https://spacefy.onrender.com/create_payment", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

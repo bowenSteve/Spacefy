@@ -25,7 +25,7 @@ function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
-    fetch("http://127.0.0.1:5000/login", {
+    fetch("https://spacefy.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function LoginPage() {
       // Wait for the user object to be available
       if (isAuthenticated && user) {
         // Send the email to the backend
-        const response = await fetch("http://127.0.0.1:5000/google_login", {
+        const response = await fetch("https://spacefy.onrender.com/google_login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

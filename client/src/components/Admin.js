@@ -11,7 +11,7 @@ function Admin() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://127.0.0.1:5000/admins", {
+    fetch("https://spacefy.onrender.com/admins", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ function Admin() {
   const handleConfirmVerification = () => {
     if (selectedAdmin) {
       // First, verify the admin
-      fetch("http://localhost:5000/add_admin", {
+      fetch("https://spacefy.onrender.com/add_admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function Admin() {
       })
       .then(() => {
         // Then, update the closed status of the selected admin
-        return fetch("http://localhost:5000/update_admin_status", {
+        return fetch("https://spacefy.onrender.com/update_admin_status", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function Admin() {
       })
       .then(() => {
         // Finally, send the confirmation email
-        return fetch("http://localhost:5000/sendmail", {
+        return fetch("https://spacefy.onrender.com/sendmail", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +110,7 @@ function Admin() {
           setShowModal(false);
           setSelectedAdmin(null);
           // Refresh the list of admins
-          fetch("http://127.0.0.1:5000/admins", {
+          fetch("https://spacefy.onrender.com/admins", {
             method: "GET",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -12,7 +12,7 @@ function SpaceContent() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        fetch("http://127.0.0.1:5000/user_spaces", {
+        fetch("https://spacefy.onrender.com/user_spaces", {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`,
@@ -36,7 +36,7 @@ function SpaceContent() {
 
     const handleViewBookings = (space) => {
         setSelectedSpace(space);
-        fetch(`http://127.0.0.1:5000/spaces/${space.id}/bookings`, {
+        fetch(`https://spacefy.onrender.com/spaces/${space.id}/bookings`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
