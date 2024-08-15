@@ -7,6 +7,8 @@ function SpaceContent() {
     const [selectedSpace, setSelectedSpace] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showBookingsModal, setShowBookingsModal] = useState(false);
+    const [bookings, setBookings] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -18,8 +20,8 @@ function SpaceContent() {
           })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
-                setSpaces(data)})
+                setSpaces(data);
+            })
             .catch((error) => console.error('Error fetching spaces:', error));
     }, []);
 
@@ -32,6 +34,29 @@ function SpaceContent() {
         setShowEditModal(true);
     };
 
+    const handleViewBookings = (space) => {
+        setSelectedSpace(space);
+        fetch(`http://127.0.0.1:5000/spaces/${space.id}/bookings`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                // Convert booking dates to dd/mm/yyyy format
+                const formattedBookings = data.map((booking) => {
+                    const date = new Date(booking.booking_date);
+                    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                    return { ...booking, booking_date: formattedDate };
+                });
+                setBookings(formattedBookings);
+                setShowBookingsModal(true);
+                console.log(formattedBookings);
+            })
+            .catch((error) => console.error('Error fetching bookings:', error));
+    };
+
     const handleCloseAddModal = () => {
         setShowAddModal(false);
     };
@@ -39,6 +64,12 @@ function SpaceContent() {
     const handleCloseEditModal = () => {
         setShowEditModal(false);
         setSelectedSpace(null);
+    };
+
+    const handleCloseBookingsModal = () => {
+        setShowBookingsModal(false);
+        setSelectedSpace(null);
+        setBookings([]);
     };
 
     return (
@@ -53,16 +84,25 @@ function SpaceContent() {
                 {spaces.map((space) => (
                     <div className="col-md-4 mb-4" key={space.id}>
                         <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">{space.name}</h5>
-                                <p className="card-text">{space.description}</p>
-                                <button
-                                    className="btn btn-info"
-                                    onClick={() => handleEditSpace(space)}
-                                >
-                                    Edit Space
-                                </button>
-                            </div>
+                        <div className="card-body">
+    <h5 className="card-title">{space.name}</h5>
+    <p className="card-text">{space.description}</p>
+    <div className="button-container">
+        <button
+            className="btn btn-info"
+            onClick={() => handleEditSpace(space)}
+        >
+            Edit Space
+        </button>
+        <button
+            className="btn btn-secondary"
+            onClick={() => handleViewBookings(space)}
+        >
+            View Bookings
+        </button>
+    </div>
+</div>
+
                         </div>
                     </div>
                 ))}
@@ -75,13 +115,6 @@ function SpaceContent() {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Add New Space</h5>
-                                <button
-                                    type="button"
-                                    className="close"
-                                    onClick={handleCloseAddModal}
-                                >
-                                    <span>&times;</span>
-                                </button>
                             </div>
                             <div className="modal-body">
                                 <AddSpace />
@@ -107,13 +140,6 @@ function SpaceContent() {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Edit Space</h5>
-                                <button
-                                    type="button"
-                                    className="close"
-                                    onClick={handleCloseEditModal}
-                                >
-                                    <span>&times;</span>
-                                </button>
                             </div>
                             <div className="modal-body">
                                 <EditSpace space={selectedSpace} />
@@ -123,6 +149,49 @@ function SpaceContent() {
                                     type="button"
                                     className="btn btn-secondary"
                                     onClick={handleCloseEditModal}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* View Bookings Modal */}
+            {showBookingsModal && (
+                <div className="modal show" style={{ display: 'block' }}>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Bookings for {selectedSpace.name}</h5>
+                            
+                            </div>
+                            <div className="modal-body">
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client Name</th>
+                                            <th>Booking Date</th>
+                                            <th>Amount Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {bookings.map((booking) => (
+                                            <tr key={booking.id}>
+                                                <td>{booking.user.email}</td>
+                                                <td>{booking.booking_date}</td>
+                                                <td>${booking.total_amount}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={handleCloseBookingsModal}
                                 >
                                     Close
                                 </button>

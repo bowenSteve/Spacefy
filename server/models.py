@@ -131,7 +131,13 @@ class Booking(db.Model):
             'start_time': self.start_time,
             'end_time': self.end_time,
             'total_amount': self.total_amount,
-            'booking_date': self.booking_date.isoformat()
+            'booking_date': self.booking_date.isoformat(),
+            'user': {
+                'id': self.user.id,
+                'first_name': self.user.first_name,
+                'second_name': self.user.second_name,
+                'email': self.user.email
+            }
         }
 
     def __repr__(self):
@@ -156,7 +162,8 @@ class Space(db.Model):
     special_features = db.Column(ARRAY(db.String), nullable=True)  # New field
     capacity = db.Column(db.Integer, nullable=True, default=0) 
 
-    bookings = relationship('Booking', back_populates='space')
+    bookings = relationship('Booking', back_populates='space', cascade='all, delete-orphan')
+    
     
     def to_dict(self):
         return {

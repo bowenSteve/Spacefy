@@ -11,6 +11,8 @@ flask-cors = "*"
 psycopg2 = "*"
 cryptography = "*"
 auth0-python = "*"
+flask-mail = "*"
+flask-mailman = "*"
 
 [dev-packages]
 
