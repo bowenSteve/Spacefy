@@ -9,10 +9,12 @@ function SpaceContent({ user }) { // Pass user as a prop
     const [showEditModal, setShowEditModal] = useState(false);
     const [showBookingsModal, setShowBookingsModal] = useState(false);
     const [bookings, setBookings] = useState([]);
+    console.log(user.is_owner)
+
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const endpoint = user.is_owner ? "https://spacefy.onrender.com/admin_spaces" : "https://spacefy.onrender.com/user_spaces";
+        const endpoint = user.owner ? "https://spacefy.onrender.com/admin_spaces" : "https://spacefy.onrender.com/user_spaces";
         
         fetch(endpoint, {
             method: "GET",
@@ -26,7 +28,7 @@ function SpaceContent({ user }) { // Pass user as a prop
             })
             .catch((error) => console.error('Error fetching spaces:', error));
     }, [user.is_owner]);
-
+   
     const handleAddSpace = () => {
         setShowAddModal(true);
     };
