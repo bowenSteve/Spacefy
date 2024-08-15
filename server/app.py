@@ -7,14 +7,23 @@ from datetime import timedelta
 from flask_cors import CORS
 from sqlalchemy.orm import joinedload
 import base64
+from flask_mail import Mail, Message
 
 
 
 app = Flask(__name__)
 CORS(app)
+# Initialize Flask-Mailman
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'stevenbowyen17@gmail.com'
+app.config['MAIL_PASSWORD'] = "suts qwbg qsqq pghi"
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:password@localhost/app1_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@dpg-cqtovtlds78s739r3r7g-a/app1_db_cwni"
 app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
@@ -26,6 +35,63 @@ jwt = JWTManager(app)
 from models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
 migrate = Migrate(app, db)
 db.init_app(app)
+
+@app.route("/sendmail", methods=['POST'])
+def sendmail():
+    data = request.json
+    recipient = data.get('email')
+    first_name = data.get('first_name')
+    second_name = data.get('second_name')
+
+    msg = Message(
+        'Account Registration Confirmation',
+        sender='spacefy@example.com',
+        recipients=[recipient]
+    )
+    msg.body = f"Dear {first_name} {second_name},\n\nYour account has been successfully registered as a Space Owner on Spacefy.Use this link to Login.\n\nBest regards,\nSpacefy Team"
+    mail.send(msg)
+    return {"message": "Email sent successfully"}, 200
+
+#close admin ticket
+
+@app.route("/update_admin_status", methods=['PATCH'])
+@jwt_required()
+def update_admin_status():
+    data = request.json
+    admin_id = data.get('id')
+    closed_status = data.get('closed')
+
+    # Validate the input data
+    if admin_id is None or closed_status is None:
+        return jsonify({"message": "Missing data"}), 400
+
+    # Find the admin by ID
+    admin = Admin.query.get(admin_id)
+    if not admin:
+        return jsonify({"message": "Admin not found"}), 404
+    
+    # Update the closed status
+    admin.closed = closed_status
+    db.session.commit()
+    
+    return jsonify({"message": "Admin status updated successfully"}), 200
+
+#bookings and space
+@app.route('/spaces/<int:space_id>/bookings', methods=['GET'])
+def get_bookings_for_space(space_id):
+
+    space = Space.query.get(space_id)
+    if not space:
+        abort(404, description="Space not found")
+    
+
+    bookings = Booking.query.filter_by(space_id=space_id).all()
+    
+
+    bookings_list = [booking.to_dict() for booking in bookings]
+
+    return jsonify(bookings_list)
+
 
 @app.route('/signup', methods=['POST'])
 def SignUp():
@@ -240,6 +306,16 @@ def update_space(id):
     db.session.commit()
     return jsonify({"success": "Space has been updated successfully", "space": space.to_dict()}), 200
 
+#delete space
+@app.route('/spaces/<int:space_id>', methods=['DELETE'])
+def delete_space(space_id):
+    space = Space.query.get(space_id)
+    if space:
+        db.session.delete(space)
+        db.session.commit()
+        return jsonify({"message": "Space deleted successfully!"}), 200
+    else:
+        return jsonify({"error": "Space not found"}), 404
 
 
 @app.route('/spaces', methods=['POST'])

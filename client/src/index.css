@@ -341,7 +341,14 @@ background-color: white;
   text-align: center;
 }
 
+.button-color btn{
+  background-color: rgb(219, 87, 87);
+}
 
-
-
-
+.booking-text{
+  color: rgb(199, 102, 102);
+}
+.button-container {
+  display: flex;
+  gap: 70px; /* Adjust the gap as needed */
+}

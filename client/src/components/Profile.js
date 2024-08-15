@@ -53,7 +53,7 @@ function Profile() {
       case 'Profile':
         return <ProfileContent user={user} />;
       case 'Bookings':
-        return <BookingsContent user={user} />;
+        return user.role ? <div>Access Denied</div> : <BookingsContent user={user} />;
       case 'Spaces':
         return (user.role || user.owner) ? <SpacesContent user={user} /> : <div>Access Denied</div>;
       case 'Admin':
@@ -80,14 +80,16 @@ function Profile() {
                 Profile
               </button>
             </li>
-            <li style={{ marginBottom: '10px' }}>
-              <button
-                className={`btn ${activeSection === 'Bookings' ? 'btn-primary' : 'btn-outline-primary'}`}
-                onClick={() => setActiveSection('Bookings')}
-              >
-                Bookings
-              </button>
-            </li>
+            {!user.role && (
+              <li style={{ marginBottom: '10px' }}>
+                <button
+                  className={`btn ${activeSection === 'Bookings' ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setActiveSection('Bookings')}
+                >
+                  Bookings
+                </button>
+              </li>
+            )}
             {(user.role || user.owner) && (
               <li style={{ marginBottom: '10px' }}>
                 <button

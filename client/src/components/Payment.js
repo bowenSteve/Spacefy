@@ -188,8 +188,8 @@ function Payment(){
           </div>
         </div>
         <div className="mt-auto">
-          <h3>Book This Space</h3>
-          <div className="calendar-container">
+          <h3>Book This Space</h3>{ isAvailable? <></>:<span className='booking-text'>highlighted dates have already been booked!</span>}
+          <div className="calendar-container mb-4">
             <Calendar
               selectRange
               onChange={handleDateChange}
