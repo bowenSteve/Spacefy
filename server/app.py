@@ -48,7 +48,7 @@ def sendmail():
         sender='spacefy@example.com',
         recipients=[recipient]
     )
-    msg.body = f"Dear {first_name} {second_name},\n\nYour account has been successfully registered as a Space Owner on Spacefy.Use this link to Login.\n\nBest regards,\nSpacefy Team"
+    msg.body = f"Dear {first_name} {second_name},\n\nYour account has been successfully registered as a Space Owner on Spacefy.Use this link to Login https://spacefy-nu.vercel.app/ .\n\nBest regards,\nSpacefy Team"
     mail.send(msg)
     return {"message": "Email sent successfully"}, 200
 
@@ -363,6 +363,17 @@ def user_spaces():
     spaces_list = [space.to_dict() for space in spaces]
 
     return jsonify(spaces_list), 200
+
+@app.route("/admin_spaces", methods=["GET"])
+@jwt_required()
+def admin_spaces():
+    spaces = Space.query.all()
+    
+    spaces_list = [space.to_dict() for space in spaces]
+
+    return jsonify(spaces_list), 200
+
+
 
 
 @app.route('/create_booking', methods=['POST'])

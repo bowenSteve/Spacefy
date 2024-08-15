@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EditSpace from "./EditSpace";
 import AddSpace from './AddSpace';
 
-function SpaceContent() {
+function SpaceContent({ user }) { // Pass user as a prop
     const [spaces, setSpaces] = useState([]);
     const [selectedSpace, setSelectedSpace] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -12,7 +12,9 @@ function SpaceContent() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        fetch("https://spacefy.onrender.com/user_spaces", {
+        const endpoint = user.is_owner ? "https://spacefy.onrender.com/admin_spaces" : "https://spacefy.onrender.com/user_spaces";
+        
+        fetch(endpoint, {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`,
@@ -23,7 +25,7 @@ function SpaceContent() {
                 setSpaces(data);
             })
             .catch((error) => console.error('Error fetching spaces:', error));
-    }, []);
+    }, [user.is_owner]);
 
     const handleAddSpace = () => {
         setShowAddModal(true);
@@ -44,7 +46,6 @@ function SpaceContent() {
         })
             .then((res) => res.json())
             .then((data) => {
-                // Convert booking dates to dd/mm/yyyy format
                 const formattedBookings = data.map((booking) => {
                     const date = new Date(booking.booking_date);
                     const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
