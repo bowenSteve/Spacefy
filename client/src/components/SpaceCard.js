@@ -9,7 +9,7 @@ function SpaceCard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/spaces/${id}`)
+    fetch(`https://spacefy.onrender.com/spaces/${id}`)
       .then(res => res.json())
       .then(data => {
         setSpace(data);

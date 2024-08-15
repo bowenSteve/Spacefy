@@ -23,7 +23,7 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@dpg-cqtovtlds78s739r3r7g-a/app1_db_cwni"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@dpg-cqtovtlds78s739r3r7g-a.oregon-postgres.render.com/app1_db_cwni"
 app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
@@ -32,7 +32,7 @@ app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 10000000000
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
+from .models import db, User, Agreement, Payment, UserRole, Booking, Space, Admin
 migrate = Migrate(app, db)
 db.init_app(app)
 

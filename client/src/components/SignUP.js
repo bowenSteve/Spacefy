@@ -27,8 +27,8 @@ function SignUpPage() {
         e.preventDefault();
 
         const apiEndpoint = formData.role === "Space_Owner"
-            ? 'http://localhost:5000/admin_signup'
-            : 'http://localhost:5000/signup';
+            ? 'https://spacefy.onrender.com/admin_signup'
+            : 'https://spacefy.onrender.com/signup';
 
         const formDataToSend = new FormData();
         formDataToSend.append("first_name", formData.firstName);

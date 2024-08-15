@@ -14,19 +14,13 @@ function Navbar() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch("http://127.0.0.1:5000/current_user", {
+      fetch("https://spacefy.onrender.com/current_user", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
         }
       })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Failed to fetch current user");
-          }
-        })
+        .then(response => response.ok ? response.json() : Promise.reject("Failed to fetch current user"))
         .then(data => {
           if (data.id) {
             setIsLoggedIn(true);
@@ -51,7 +45,7 @@ function Navbar() {
       if (isAuthenticated && auth0User) {
         try {
           const idToken = await getIdTokenClaims(); // Get the ID token
-          const response = await fetch("http://127.0.0.1:5000/google_login", {
+          const response = await fetch("https://spacefy.onrender.com/google_login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -94,7 +88,7 @@ function Navbar() {
     }
 
     // Clear local authentication
-    fetch('http://127.0.0.1:5000/logout', {
+    fetch('https://spacefy.onrender.com/logout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

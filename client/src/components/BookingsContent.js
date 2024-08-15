@@ -7,7 +7,7 @@ function BookingsContent() {
     const [selectedBooking, setSelectedBooking] = useState(null);
 
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/user_bookings", {
+        fetch("https://spacefy.onrender.com/user_bookings", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

@@ -15,7 +15,7 @@ function ProfileContent({ user }) {
   const handleSubmit = (e) => {
     const token = localStorage.getItem("token");
     e.preventDefault();
-    fetch(`http://127.0.0.1:5000/users/${user.id}`, {
+    fetch(`https://spacefy.onrender.com/users/${user.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
