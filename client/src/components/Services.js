@@ -1,41 +1,79 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import "../styling/services.css";
 function Services() {
     return (
         <div>
             <Navbar/>
         
         <div>
+
+            <div className="container-main">
+            <div className="container-image">
+            <img> </img>
+            </div>
+            <div className="container-mini">
             <h1>FEATURES AND BENEFITS</h1>
             <p>Are you looking for an event space for yourself or your team? Look no further than Spacefy. Our packages provide a premium and productive environment, designed to meet the needs of modern events.</p>
             <p>Find professional and inspiring environments for your next business meeting, brainstorming session, or workshop.</p>
             <p>Use our intuitive search and filter options to find spaces that match your specific needs based on location, price, capacity, and amenities.</p>
+            </div>
+            </div>
 
             <h2>Our Spaces</h2>
 
-            <div>
-                <h3>Private Space</h3>
+            <div className="container-main">
+            <div className="container-image">
+
+                
                 <img src="" alt="Private Space" />
-                <p>Our private spaces offer an exclusive environment perfect for focused work, intimate gatherings, or confidential meetings. Enjoy complete privacy and a serene atmosphere tailored to your specific needs.</p>
+            </div>
+            <div className="container-mini">
+            <h3>Private Space</h3>
+
+            <p>Our private spaces offer an exclusive environment perfect for focused work, intimate gatherings, or confidential meetings. Enjoy complete privacy and a serene atmosphere tailored to your specific needs.</p>
+
+            </div>
             </div>
 
-            <div>
+            <div className="container-main">
+                <div className="container-mini">
                 <h3>Club Spaces</h3>
-                <img src="" alt="Club Spaces" />
+                
                 <p>Club spaces provide a vibrant setting ideal for social events, networking, and entertainment. Experience a lively atmosphere with all the amenities needed for a memorable gathering.</p>
+
+                </div>
+
+                
+                <div className="container-image">
+                <img src="" alt="Club Spaces" />
+
+                </div>
             </div>
 
+            <div className="container-main">
             <div>
-                <h3>Indoor Sports Package</h3>
-                <img src="" alt="Indoor Sports Package" />
-                <p>Stay active and engaged with our indoor sports package, featuring facilities for activities like basketball, badminton, and more. Perfect for team-building events or personal fitness, regardless of the weather.</p>
+            <img src="" alt="Indoor Sports Package" />
+
+            </div>
+            <div>
+            <h3>Indoor Sports Package</h3>
+               
+            <p>Stay active and engaged with our indoor sports package, featuring facilities for activities like basketball, badminton, and more. Perfect for team-building events or personal fitness, regardless of the weather.</p>
+
+            </div> 
             </div>
 
-            <div>
-                <h3>Meeting Rooms</h3>
+            <div className="container-main">
+            <div className="container-mini">
+            <h3>Meeting Rooms</h3>
+                
+            <p>Our meeting rooms package provides professional and versatile spaces designed to accommodate business meetings, workshops, and seminars. Equipped with state-of-the-art technology, including high-speed internet, projectors, and audio-visual equipment, our rooms ensure a seamless and productive experience.</p>
+            </div>
+            <div className="container-image">
                 <img src="" alt="Meeting Rooms" />
-                <p>Our meeting rooms package provides professional and versatile spaces designed to accommodate business meetings, workshops, and seminars. Equipped with state-of-the-art technology, including high-speed internet, projectors, and audio-visual equipment, our rooms ensure a seamless and productive experience.</p>
+            </div> 
             </div>
 
             <footer>
