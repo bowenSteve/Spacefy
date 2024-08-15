@@ -47,41 +47,41 @@ function LoginPage() {
       });
   };
   const handleGoogleLogin = async () => {
-  try {
-    await loginWithPopup({ connection: 'google-oauth2' });
-
-    if (isAuthenticated && user) {
-      // Check if the user email is registered
-      const response = await fetch("https://spacefy.onrender.com/google_login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: user.email }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Save token in local storage and navigate to the homepage
-        localStorage.setItem('auth0_id_token', data.access_token);
-        navigate("/");
-      } else if (response.status === 404) {
-        // Handle unregistered user case
-        alert("This email is not registered. Please sign up first.");
-        navigate("/signup");
+    try {
+      await loginWithPopup({ connection: 'google-oauth2' });
+  
+      if (isAuthenticated && user) {
+        // Check if the user email is registered
+        const response = await fetch("https://spacefy.onrender.com/google_login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: user.email }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          // Save token in local storage and navigate to the homepage
+          localStorage.setItem('auth0_id_token', data.access_token);
+          navigate("/");
+        } else if (response.status === 404) {
+          // Handle unregistered user case
+          alert("This email is not registered. Please sign up first.");
+          navigate("/signup");
+        } else {
+          const err = await response.json();
+          console.error("Error:", err);
+          // Handle other errors
+        }
       } else {
-        const err = await response.json();
-        console.error("Error:", err);
-        // Handle other errors
+        console.error("Google login failed: User email not available");
       }
-    } else {
-      console.error("Google login failed: User email not available");
+    } catch (error) {
+      console.error("Login with Google failed:", error);
     }
-  } catch (error) {
-    console.error("Login with Google failed:", error);
-  }
-};
-
+  };
+  
   
 
   return (
