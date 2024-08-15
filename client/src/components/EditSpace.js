@@ -101,8 +101,8 @@ function EditSpace({ space }) {
         <div className="container mt-5">
             <h2 className="mb-4">Edit Space</h2>
             <form onSubmit={handleSubmit}>
-                <div className="row">
-                    <div className="col-md-6 mb-3">
+                <div className="row mb-3">
+                    <div className="col-md-6">
                         <label htmlFor="name" className="form-label">Name:</label>
                         <input
                             type="text"
@@ -115,7 +115,7 @@ function EditSpace({ space }) {
                             required
                         />
                     </div>
-                    <div className="col-md-6 mb-3">
+                    <div className="col-md-6">
                         <label htmlFor="imageUrl" className="form-label">Image URL:</label>
                         <input
                             type="text"
@@ -154,8 +154,8 @@ function EditSpace({ space }) {
                         required
                     />
                 </div>
-                <div className="row">
-                    <div className="col-md-6 mb-3">
+                <div className="row mb-3">
+                    <div className="col-md-6">
                         <label htmlFor="hourlyPrice" className="form-label">Hourly Price:</label>
                         <input
                             type="number"
@@ -168,7 +168,7 @@ function EditSpace({ space }) {
                             required
                         />
                     </div>
-                    <div className="col-md-6 mb-3">
+                    <div className="col-md-6">
                         <label htmlFor="dailyPrice" className="form-label">Daily Price:</label>
                         <input
                             type="number"
@@ -222,10 +222,10 @@ function EditSpace({ space }) {
                         <option value="false">Not Available</option>
                     </select>
                 </div>
-                <button type="submit" className="btn btn-primary">Update Space</button>
+                <button type="submit" className="btn btn-primary me-2">Update Space</button>
                 <button 
                     type="button" 
-                    className="btn btn-danger ms-2" 
+                    className="btn btn-danger" 
                     onClick={handleDelete}
                 >
                     Delete Space

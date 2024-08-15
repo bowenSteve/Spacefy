@@ -50,9 +50,8 @@ function LoginPage() {
     try {
       await loginWithPopup({ connection: 'google-oauth2' });
   
-      // Wait for the user object to be available
       if (isAuthenticated && user) {
-        // Send the email to the backend
+        // Check if the user email is registered
         const response = await fetch("https://spacefy.onrender.com/google_login", {
           method: "POST",
           headers: {
@@ -63,13 +62,17 @@ function LoginPage() {
   
         if (response.ok) {
           const data = await response.json();
-          // Save token in local storage
+          // Save token in local storage and navigate to the homepage
           localStorage.setItem('auth0_id_token', data.access_token);
           navigate("/");
+        } else if (response.status === 404) {
+          // Handle unregistered user case
+          alert("This email is not registered. Please sign up first.");
+          navigate("/signup");
         } else {
           const err = await response.json();
           console.error("Error:", err);
-          // Handle error response as needed
+          // Handle other errors
         }
       } else {
         console.error("Google login failed: User email not available");
@@ -78,6 +81,7 @@ function LoginPage() {
       console.error("Login with Google failed:", error);
     }
   };
+  
   
 
   return (
