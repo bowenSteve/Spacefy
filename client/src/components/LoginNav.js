@@ -44,13 +44,6 @@ function Navbar() {
             background-color: rgba(0, 0, 0, 0.5); /* Translucent black background */
             color: #fff; /* White text color for better contrast */
           }
-          .navbar-toggler {
-            border: none; /* Remove default border */
-            background-color: #fff; /* White background for the button */
-          }
-          .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-width='2' d='M1 4h14M1 8h14M1 12h14'/%3e%3c/svg%3e"); /* Custom hamburger icon */
-          }
         }
       `}</style>
     </nav>

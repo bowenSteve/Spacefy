@@ -44,6 +44,7 @@ function Admin() {
 
   const handleConfirmVerification = () => {
     if (selectedAdmin) {
+      // First, verify the admin
       fetch("https://spacefy.onrender.com/add_admin", {
         method: "POST",
         headers: {
@@ -64,6 +65,7 @@ function Admin() {
         return res.json();
       })
       .then(() => {
+        // Then, update the closed status of the selected admin
         return fetch("https://spacefy.onrender.com/update_admin_status", {
           method: "PATCH",
           headers: {
@@ -83,6 +85,7 @@ function Admin() {
         return res.json();
       })
       .then(() => {
+        // Finally, send the confirmation email
         return fetch("https://spacefy.onrender.com/sendmail", {
           method: "POST",
           headers: {
@@ -106,6 +109,7 @@ function Admin() {
         setTimeout(() => {
           setShowModal(false);
           setSelectedAdmin(null);
+          // Refresh the list of admins
           fetch("https://spacefy.onrender.com/admins", {
             method: "GET",
             headers: {
@@ -123,21 +127,26 @@ function Admin() {
       });
     }
   };
+  
+  
 
+  // Separate admins based on `admin.close`
   const activeAdmins = admins.filter(admin => !admin.closed);
   const closedAdmins = admins.filter(admin => admin.closed);
+  console.log(admins)
 
   return (
     <div className="container mt-5">
-      {error && <p className="text-danger text-center">{error}</p>}
-      {confirmationMessage && <p className="text-success text-center">{confirmationMessage}</p>}
+      {error && <p className="text-danger">{error}</p>}
+      {confirmationMessage && <p className="text-success">{confirmationMessage}</p>}
 
-      <h2 className="text-center mb-4">Active Tickets</h2>
+      {/* Active Admins */}
+      <h2>Active Tickets</h2>
       {activeAdmins.length > 0 ? (
         <div className="row">
           {activeAdmins.map((admin) => (
-            <div key={admin.id} className="col-sm-12 col-md-6 col-lg-4 mb-4">
-              <div className="card">
+            <div key={admin.id} className="col-md-3">
+              <div className="card mb-4">
                 <div className="card-body">
                   <p><strong>First Name:</strong> {admin.first_name}</p>
                   <p><strong>Second Name:</strong> {admin.second_name}</p>
@@ -148,27 +157,28 @@ function Admin() {
                       Download PDF
                     </a>
                   </p>
-                  <Button 
-                    variant="primary" 
+                  <button 
+                    className="btn btn-primary" 
                     onClick={() => handleVerifyClick(admin)}
                   >
                     Verify
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-center">No open tickets found.</p>
+        <p>No open tickets found.</p>
       )}
 
-      <h2 className="text-center mb-4">Closed Tickets</h2>
+      {/* Closed Admins */}
+      <h2>Closed Tickets</h2>
       {closedAdmins.length > 0 ? (
         <div className="row">
           {closedAdmins.map((admin) => (
-            <div key={admin.id} className="col-sm-12 col-md-6 col-lg-4 mb-4">
-              <div className="card">
+            <div key={admin.id} className="col-md-3">
+              <div className="card mb-4">
                 <div className="card-body">
                   <p><strong>First Name:</strong> {admin.first_name}</p>
                   <p><strong>Second Name:</strong> {admin.second_name}</p>
@@ -185,11 +195,11 @@ function Admin() {
           ))}
         </div>
       ) : (
-        <p className="text-center">Closed tickets not found.</p>
+        <p>Open tickets not found.</p>
       )}
 
       {selectedAdmin && (
-        <Modal show={showModal} onHide={handleCloseModal} size="lg">
+        <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>User Details</Modal.Title>
           </Modal.Header>

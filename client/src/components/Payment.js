@@ -14,7 +14,7 @@ const isHighlighted = (date, bookings) => {
   });
 };
 
-function Payment() {
+function Payment(){
   const { id } = useParams();
   const [space, setSpace] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -127,6 +127,11 @@ function Payment() {
       return;
     }
 
+    if (!isLoggedin) {
+      navigate("/login");
+      return;
+    }
+
     navigate('/simulate', {
       state: {
         itemName: space.name,
@@ -162,9 +167,9 @@ function Payment() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
-      <div className="container mt-5 pt-5 flex-grow-1">
+      <div className="container mt-5 pt-5 flex-grow-1 d-flex flex-column">
         <div className="row">
-          <div className="col-lg-6 col-md-12 mb-4">
+          <div className="col-md-6">
             <h1>{space.name}</h1>
             <p className="mb-4"><strong>Special Features:</strong></p>
             <ul className="mb-4">
@@ -178,13 +183,12 @@ function Payment() {
             <p className="mb-4"><strong>Location:</strong> {space.location}</p>
             <p className="mb-4"><strong>Rate:</strong> ${space.hourly_price}</p>
           </div>
-          <div className="col-lg-6 col-md-12 mb-4">
+          <div className="col-md-6">
             <img src={space.image_url} alt={space.name} className="img-fluid" />
           </div>
         </div>
-        <div className="d-flex flex-column align-items-center mt-4">
-          <h3>Book This Space</h3>
-          {!isAvailable && <span className='booking-text mb-3'>Highlighted dates have already been booked!</span>}
+        <div className="mt-auto">
+          <h3>Book This Space</h3>{ isAvailable? <></>:<span className='booking-text'>highlighted dates have already been booked!</span>}
           <div className="calendar-container mb-4">
             <Calendar
               selectRange
@@ -208,19 +212,19 @@ function Payment() {
             </style>
           </div>
           {startDate && endDate && (
-            <div className="text-center mb-4">
-              <p className="mb-2"><strong>Start Date:</strong> {formatDateTime(startDate.toISOString())}</p>
-              <p className="mb-2"><strong>End Date:</strong> {formatDateTime(endDate.toISOString())}</p>
-              <p className="mb-2"><strong>Tax:</strong> ${Math.round(tax)}</p>
-              <p className="mb-2"><strong>Total Amount:</strong> ${Math.round(totalAmount)}</p>
+            <div>
+              <p className="mb-4"><strong>Start Date:</strong> {formatDateTime(startDate.toISOString())}</p>
+              <p className="mb-4"><strong>End Date:</strong> {formatDateTime(endDate.toISOString())}</p>
+              <p className="mb-4"><strong>Tax:</strong> ${Math.round(tax)}</p>
+              <p className="mb-4"><strong>Total Amount:</strong> ${Math.round(totalAmount)}</p>
             </div>
           )}
-          <div className="d-flex justify-content-center mb-4">
+          <div className="d-flex justify-content-center">
             <button
               type="button"
               className="btn book-btn2"
               onClick={handlePayButtonClick}
-              disabled={!startDate || !endDate || !isLoggedin}
+              disabled={(!startDate || !endDate) && (isLoggedin)} // Disable button if dates are not selected
             >
               <span>{isLoggedin ? "Proceed to Payment" : "Login to continue"}</span>
             </button>

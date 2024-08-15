@@ -44,6 +44,7 @@ function AddSpace() {
         .then(data => {
             alert("Space added successfully!");
             console.log(data)
+
         })
         .catch(error => {
             console.error('Error:', error);
@@ -56,7 +57,7 @@ function AddSpace() {
             <h2 className="mb-4">Add New Space</h2>
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="col-12 col-md-6 mb-3">
+                    <div className="col-md-6 mb-3">
                         <label htmlFor="name" className="form-label">Name:</label>
                         <input
                             type="text"
@@ -69,7 +70,7 @@ function AddSpace() {
                             required
                         />
                     </div>
-                    <div className="col-12 col-md-6 mb-3">
+                    <div className="col-md-6 mb-3">
                         <label htmlFor="imageUrl" className="form-label">Image URL:</label>
                         <input
                             type="text"
@@ -109,7 +110,7 @@ function AddSpace() {
                     />
                 </div>
                 <div className="row">
-                    <div className="col-12 col-md-6 mb-3">
+                    <div className="col-md-6 mb-3">
                         <label htmlFor="hourlyPrice" className="form-label">Hourly Price:</label>
                         <input
                             type="number"
@@ -122,7 +123,7 @@ function AddSpace() {
                             required
                         />
                     </div>
-                    <div className="col-12 col-md-6 mb-3">
+                    <div className="col-md-6 mb-3">
                         <label htmlFor="dailyPrice" className="form-label">Daily Price:</label>
                         <input
                             type="number"

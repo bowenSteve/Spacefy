@@ -37,7 +37,7 @@ function ProfileContent({ user }) {
     <div className="container mt-5">
       <h2 className="mb-4 text-center">Edit Profile</h2>
       <div className="row justify-content-center">
-        <div className="col-12 col-md-10 col-lg-8">
+        <div className="col-md-8 col-lg-6">
           <div className="card shadow-sm">
             <div className="card-body">
               <form onSubmit={handleSubmit}>

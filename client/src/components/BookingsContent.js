@@ -16,7 +16,7 @@ function BookingsContent() {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            console.log(data)
             setBookings(data);
         })
         .catch((error) => console.error('Error fetching bookings:', error));
@@ -39,10 +39,10 @@ function BookingsContent() {
 
     return (
         <div className="container mt-5">
-            <h2 className="mb-4 text-center">My Bookings</h2>
+            <h2 className="mb-4">My Bookings</h2>
             <div className="row">
                 {bookings.map((booking) => (
-                    <div className="col-sm-12 col-md-6 col-lg-4 mb-4" key={booking.id}>
+                    <div className="col-md-4 mb-4" key={booking.id}>
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Space: {booking.space_name}</h5>
@@ -59,7 +59,7 @@ function BookingsContent() {
             </div>
 
             {selectedBooking && (
-                <Modal show={showModal} onHide={handleClose} size="lg">
+                <Modal show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Invoice</Modal.Title>
                     </Modal.Header>

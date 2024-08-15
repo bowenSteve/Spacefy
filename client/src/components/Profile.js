@@ -64,16 +64,15 @@ function Profile() {
   };
 
   return (
-    <div className="d-flex">
+    <div>
       <ProfileNav />
-
-      <div className={`sidebar bg-light p-3 ${isMenuOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-        <button className="btn btn-primary mb-3 d-lg-none" onClick={toggleMenu}>
+      <div className="sidebar sidebar-bg p-3" id="sidebar" style={{ width: isMenuOpen ? '250px' : '80px' }}>
+        <button className="btn btn-bg mb-3" id="menuButton" onClick={toggleMenu}>
           ☰
         </button>
-        <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
-          <ul className="list-unstyled">
-            <li className="mb-2">
+        <div className={`canvas-menu ${isMenuOpen ? 'open' : ''}`}>
+          <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+            <li style={{ marginBottom: '10px' }}>
               <button
                 className={`btn ${activeSection === 'Profile' ? 'btn-primary' : 'btn-outline-primary'}`}
                 onClick={() => setActiveSection('Profile')}
@@ -82,7 +81,7 @@ function Profile() {
               </button>
             </li>
             {!user.role && (
-              <li className="mb-2">
+              <li style={{ marginBottom: '10px' }}>
                 <button
                   className={`btn ${activeSection === 'Bookings' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setActiveSection('Bookings')}
@@ -92,7 +91,7 @@ function Profile() {
               </li>
             )}
             {(user.role || user.owner) && (
-              <li className="mb-2">
+              <li style={{ marginBottom: '10px' }}>
                 <button
                   className={`btn ${activeSection === 'Spaces' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setActiveSection('Spaces')}
@@ -102,7 +101,7 @@ function Profile() {
               </li>
             )}
             {user.owner && (
-              <li className="mb-2">
+              <li style={{ marginBottom: '10px' }}>
                 <button
                   className={`btn ${activeSection === 'Admin' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setActiveSection('Admin')}
@@ -115,11 +114,17 @@ function Profile() {
         </div>
       </div>
 
-      <main className="flex-fill p-3" style={{ marginLeft: isMenuOpen ? '250px' : '80px' }}>
+      <div
+        className="container mt-5"
+        style={{ flex: 1, marginLeft: isMenuOpen ? '250px' : '80px' }}
+      >
         {renderContent()}
-      </main>
-      
-      <Footer />
+      </div>
+      <div className="page-container">
+        <div className="content-wrap">
+        </div>
+        <Footer />
+      </div>
     </div>
   );
 }

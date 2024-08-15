@@ -20,7 +20,7 @@ function SpaceCard() {
   }, [id]);
 
   if (!space) {
-    return <div className="container mt-5">Space not found</div>;
+    return <div>Space not found</div>;
   }
 
   const handleBookNow = () => {
@@ -32,24 +32,24 @@ function SpaceCard() {
       <Navbar />
       <div className="container mt-5 pt-5 flex-grow-1">
         <div className="row">
-          <div className="col-lg-6 mb-4 mb-lg-0">
-            <h1 className="display-4">{space.name}</h1>
+          <div className="col-md-6">
+            <h1>{space.name}</h1>
             <p className="mb-4"><strong>Special Features:</strong></p>
-            <ul className="list-unstyled mb-4">
+            <ul className="mb-4">
               {space.special_features.map((feature, index) => (
-                <li className="d-flex align-items-center mb-2" key={index}>
-                  <i className="bi bi-check2 me-2"></i> {feature}
+                <li className="no-list-style " key={index}>
+                  <i className="bi bi-check2"> </i> {feature}
                 </li>
               ))}
             </ul>
             <p className="mb-4"><strong>Capacity:</strong> {space.capacity}</p>
             <p className="mb-4"><strong>Location:</strong> {space.location}</p>
-            <p className="mb-4"><strong>Hourly Rates:</strong> ${space.hourly_price}</p>
-            <p className="mb-4"><strong>Daily Rates:</strong> ${space.daily_price}</p>
-            <button className="btn btn-primary" onClick={handleBookNow}>Book Now</button>
+            <p><strong>Hourly Rates:</strong> ${space.hourly_price}</p>
+            <p><strong>Daily Rates:</strong> ${space.daily_price}</p>
+            <button className="btn book-btn" onClick={handleBookNow}>Book Now</button>
           </div>
-          <div className="col-lg-6">
-            <img src={space.image_url} alt={space.name} className="img-fluid rounded" />
+          <div className="col-md-6">
+            <img src={space.image_url} alt={space.name} className="img-fluid" />
           </div>
         </div>
       </div>
