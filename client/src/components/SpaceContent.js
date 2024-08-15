@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import EditSpace from "./EditSpace";
 import AddSpace from './AddSpace';
 
-function SpaceContent({ user }) {
+function SpaceContent({ user }) { // Pass user as a prop
     const [spaces, setSpaces] = useState([]);
     const [selectedSpace, setSelectedSpace] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showBookingsModal, setShowBookingsModal] = useState(false);
     const [bookings, setBookings] = useState([]);
-    
+    console.log(user.is_owner)
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const endpoint = user.is_owner ? "https://spacefy.onrender.com/admin_spaces" : "https://spacefy.onrender.com/user_spaces";
+        const endpoint = user.owner ? "https://spacefy.onrender.com/admin_spaces" : "https://spacefy.onrender.com/user_spaces";
         
         fetch(endpoint, {
             method: "GET",
@@ -53,6 +55,7 @@ function SpaceContent({ user }) {
                 });
                 setBookings(formattedBookings);
                 setShowBookingsModal(true);
+                console.log(formattedBookings);
             })
             .catch((error) => console.error('Error fetching bookings:', error));
     };
@@ -82,26 +85,27 @@ function SpaceContent({ user }) {
 
             <div className="row">
                 {spaces.map((space) => (
-                    <div className="col-md-6 col-lg-4 mb-4" key={space.id}>
+                    <div className="col-md-4 mb-4" key={space.id}>
                         <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">{space.name}</h5>
-                                <p className="card-text">{space.description}</p>
-                                <div className="d-flex justify-content-between">
-                                    <button
-                                        className="btn btn-info me-2"
-                                        onClick={() => handleEditSpace(space)}
-                                    >
-                                        Edit Space
-                                    </button>
-                                    <button
-                                        className="btn btn-secondary"
-                                        onClick={() => handleViewBookings(space)}
-                                    >
-                                        View Bookings
-                                    </button>
-                                </div>
-                            </div>
+                        <div className="card-body">
+    <h5 className="card-title">{space.name}</h5>
+    <p className="card-text">{space.description}</p>
+    <div className="button-container">
+        <button
+            className="btn btn-info"
+            onClick={() => handleEditSpace(space)}
+        >
+            Edit Space
+        </button>
+        <button
+            className="btn btn-secondary"
+            onClick={() => handleViewBookings(space)}
+        >
+            View Bookings
+        </button>
+    </div>
+</div>
+
                         </div>
                     </div>
                 ))}
@@ -110,15 +114,10 @@ function SpaceContent({ user }) {
             {/* Add Space Modal */}
             {showAddModal && (
                 <div className="modal show" style={{ display: 'block' }}>
-                    <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Add New Space</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    onClick={handleCloseAddModal}
-                                ></button>
                             </div>
                             <div className="modal-body">
                                 <AddSpace />
@@ -140,15 +139,10 @@ function SpaceContent({ user }) {
             {/* Edit Space Modal */}
             {showEditModal && selectedSpace && (
                 <div className="modal show" style={{ display: 'block' }}>
-                    <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Edit Space</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    onClick={handleCloseEditModal}
-                                ></button>
                             </div>
                             <div className="modal-body">
                                 <EditSpace space={selectedSpace} />
@@ -170,18 +164,14 @@ function SpaceContent({ user }) {
             {/* View Bookings Modal */}
             {showBookingsModal && (
                 <div className="modal show" style={{ display: 'block' }}>
-                    <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Bookings for {selectedSpace?.name}</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    onClick={handleCloseBookingsModal}
-                                ></button>
+                                <h5 className="modal-title">Bookings for {selectedSpace.name}</h5>
+                            
                             </div>
                             <div className="modal-body">
-                                <table className="table table-responsive">
+                                <table className="table">
                                     <thead>
                                         <tr>
                                             <th>Client Name</th>

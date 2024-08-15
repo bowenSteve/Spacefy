@@ -141,6 +141,7 @@ function Simulate() {
     .then(data => {
       console.log(data)
         if (data.payment) {
+
             setPaymentSuccess(true);
             handleSubmit(); // Call handleSubmit here to update space availability
         } else {
@@ -171,7 +172,7 @@ function Simulate() {
       <Navbar />
       <div className="container mt-5 pt-5 flex-grow-1">
         <div className="row">
-          <div className="col-lg-6 mb-4 mb-lg-0">
+          <div className="col-md-6">
             <h2>Invoice</h2>
             <div className="invoice">
               <p><strong>Item:</strong> {itemName}</p>
@@ -181,13 +182,13 @@ function Simulate() {
               <p><strong>Total:</strong> ${Math.round(totalAmount)}</p>
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <h2>Payment Methods</h2>
-            <div className="payment-options d-flex flex-column flex-sm-row justify-content-start mb-4">
-              <button className="btn btn-outline-primary mb-2 mb-sm-0 me-sm-2" onClick={() => handlePaymentChange('Credit Card')}>
+            <div className="payment-options d-flex justify-content-between mb-4">
+              <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Credit Card')}>
                 Credit Card
               </button>
-              <button className="btn btn-outline-primary mb-2 mb-sm-0 me-sm-2" onClick={() => handlePaymentChange('Mpesa')}>
+              <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Mpesa')}>
                 Mpesa
               </button>
               <button className="btn btn-outline-primary" onClick={() => handlePaymentChange('Airtel-Money')}>
@@ -227,20 +228,20 @@ function Simulate() {
               </div>
             )}
 
-            {paymentMethod === 'Airtel-Money' && (
+{paymentMethod === 'Airtel-Money' && (
               <div className="payment-form">
                 <h3>Airtel-Money Information</h3>
                 <form>
                   <div className="mb-3">
                     <label htmlFor="airtel-number" className="form-label">Airtel-Money Number</label>
-                    <input type="text" className="form-control" id="airtel-number" placeholder="07XX XXX XXX" />
+                    <input type="text" className="form-control" id="mpesa-number" placeholder="07XX XXX XXX" />
                   </div>
                 </form>
               </div>
             )}
 
             <div className="mb-3 form-check">
-              <Link to={"/agreement"} className="text-decoration-none text-primary"><label>Read our terms and conditions</label></Link>
+              <Link to={"/agreement"}><label className="all-links">Read our terms and conditions</label></Link>
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -252,18 +253,18 @@ function Simulate() {
                 I agree to the terms and conditions
               </label>
             </div>
-
             <button
-              className="btn btn-primary w-100"
+              type="button"
+              className="btn book-btn"
               onClick={handlePayButtonClick}
-              disabled={!paymentMethod || !agreeToTerms}
             >
-              Pay ${Math.round(totalAmount)}
+              Pay Now
             </button>
-
             {paymentSuccess && (
-              <div className="alert alert-success mt-4" role="alert">
-                Payment was successful!
+              <div className="alert alert-success mt-3" role="alert">
+                Payment successful! Your payment of ${Math.round(totalAmount)} has been deposited to Spacefy ltd account no. 13375859.
+                Thank you for your services!
+                More information will be sent to your email.
               </div>
             )}
           </div>
