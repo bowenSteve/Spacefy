@@ -47,3 +47,7 @@ $ `python app.py`
 $ `cd client` 
 $`npm install`
 $ `npm start`
+
+## Contacts
+Gmail : Spacefy@rentspace.com
+Facebook : Spacefy rentstore
