@@ -103,12 +103,11 @@ function Navbar() {
           localStorage.removeItem('token');
           navigate('/login');
         } else {
-          alert("Something went wrong");
+          console.log("Something went wrong");
         }
       })
       .catch(error => {
         console.error("Error logging out:", error);
-        alert("Something went wrong");
       });
   };
 
