@@ -8,10 +8,10 @@ Space owners around the country can lease their property and make it available f
 ##  MVP features
 ### Admin Module
    * Admin can add users with the role of space owners to the platform, view and update a space.
-#### Client Module
+### Client Module
   * A user can signup as a client.
   * View available spaces, book spaces with duration-based pricing and simulate payments.
-#### Space owner Module
+### Space owner Module
   * A user can signup as a space owner.
   * Space owner can add, view and update a space. 
 
