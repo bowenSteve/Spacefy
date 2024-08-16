@@ -1,6 +1,6 @@
 # Spacefy
 ## Project Description
-* Spacefy is a platform that bring people together to meet, create, and celebrate.Its an online marketplace will make it easier than ever to find and book unique spaces for any activity.
+* Spacefy is a platform that bring people together to meet, create, and celebrate.Its an online marketplace that make it easier than ever to find and book unique spaces for any activity.
 
 * A platform that enable people to meet, create (collaborate with colleagues ) and celebrate (a major milestone). 
 Space owners around the country can lease their property and make it available for rent by the hour/ day for people seeking a location for their next meeting, event or activity
@@ -49,5 +49,5 @@ $`npm install`
 $ `npm start`
 
 ## Contacts
-Gmail : Spacefy@rentspace.com
-Facebook : Spacefy rentstore
+Gmail : Spacefy@rentspace.com  </b>
+Facebook : Spacefy@rentspace
