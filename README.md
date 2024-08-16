@@ -6,22 +6,15 @@
 Space owners around the country can lease their property and make it available for rent by the hour/ day for people seeking a location for their next meeting, event or activity
 
 ##  MVP features
-1. Admin Module
-   * Add spaces
-   * View all added spaces (more information about the added space for edits)
-   * Add Users based on roles and permissions
-2. Client Module
-   * View available spaces
-   * View more details about a space
-   * Login to platform
-      1. Social Auth
-      2. Local Auth
-   * Book space
-   * Duration specified
-   * Amount will be calculated depending on the duration
-   * Status of the booked space changes (Meaning it can't be booked till status changes to available )
-   * Agreement incubator 
-   * Simulate a payment process i.e billing and invoicing of any space booked
+### Admin Module
+   * Admin can add users with the role of space owners to the platform, view and update a space.
+#### Client Module
+  * A user can signup as a client.
+  * View available spaces, book spaces with duration-based pricing and simulate payments.
+#### Space owner Module
+  * A user can signup as a space owner.
+  * Space owner can add, view and update a space. 
+
 ## Technologies Used
 * `GIT`
 * `HTML`
