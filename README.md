@@ -4,6 +4,25 @@
 
 * A platform that enable people to meet, create (collaborate with colleagues ) and celebrate (a major milestone). 
 Space owners around the country can lease their property and make it available for rent by the hour/ day for people seeking a location for their next meeting, event or activity
+## Technologies Used
+* `GIT`
+* `HTML`
+* `REACT.JS`
+* `JSX`
+* `PYTHON`
+* `REDUX`
+* `POSTGRESQL`
+## Project Stack Overview
+
+| Component         | Technology / Tool         |
+|-------------------|---------------------------|
+| **Backend**       | Flask                     |
+| **Database**      | PostgreSQL                |
+| **Wireframes**    | Figma (Mobile Friendly)   |
+| **Testing**       | Jest & Minitest            |
+| **Frontend**      | ReactJs                   |
+| **State Management** | Redux Toolkit          |
+    
 
 ##  MVP features
 1. Admin Module
