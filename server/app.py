@@ -23,7 +23,7 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://app1_db_cwni_user:xeDsGmeA86DRiUy1ggnI9kcwLThjz3Ps@dpg-cqtovtlds78s739r3r7g-a.oregon-postgres.render.com/app1_db_cwni"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://spacefy_app_user:Hiyg9PEFbfZ5wGXggXfj3ZqFtKgXxlR1@dpg-crlur408fa8c739uact0-a.oregon-postgres.render.com/spacefy_app"
 app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
