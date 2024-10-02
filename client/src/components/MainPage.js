@@ -8,6 +8,7 @@ function MainPage() {
   const [spaces, setSpaces] = useState([]);
   const [selectedOption, setSelectedOption] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +16,7 @@ function MainPage() {
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
-        console.log(data)
+        setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching spaces:', error);
@@ -84,6 +85,10 @@ function MainPage() {
           </div>
         </div>
         <div className="container">
+          {loading? (<div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
+  <h3>Server loading... keep refreshing</h3>
+</div>
+) : (
           <div className="row">
             {sortedSpaces.map((space, index) => (
               <div key={index} className="col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
@@ -102,7 +107,7 @@ function MainPage() {
                 <img alt="image" src={space.image_url} className="space-image" />
               </div>
             ))}
-          </div>
+          </div>)}
         </div>
       </main>
       <Footer />
