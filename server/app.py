@@ -1,4 +1,6 @@
 import random
+import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -9,24 +11,28 @@ from sqlalchemy.orm import joinedload
 import base64
 from flask_mail import Mail, Message
 
+# Load environment variables
+load_dotenv()
+
 
 
 app = Flask(__name__)
 CORS(app)
-# Initialize Flask-Mailman
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'stevenbowyen17@gmail.com'
-app.config['MAIL_PASSWORD'] = "suts qwbg qsqq pghi"
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+
+# Email Configuration
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 465))
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'False').lower() == 'true'
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'True').lower() == 'true'
 mail = Mail(app)
 
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://spacefy_15p3_user:kc1y2ciKnJgOEuTuP4VWPasQp23Q9KwU@dpg-d1i1lv8dl3ps73b2kr00-a.oregon-postgres.render.com/spacefy_15p3"
-app.config["JWT_SECRET_KEY"] = "fsbdgfnhgvjnvhmvh" + str(random.randint(1, 1000000000000))
+# Database Configuration
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY') + str(random.randint(1, 1000000000000))
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
-app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV" + str(random.randint(1, 1000000000000))
+app.config["SECRET_KEY"] = os.getenv('SECRET_KEY') + str(random.randint(1, 1000000000000))
 
 
 bcrypt = Bcrypt(app)
