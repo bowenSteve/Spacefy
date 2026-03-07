@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: Spacefy
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: ./migrate.sh
-    postDeployCommands:
-      - python seed.py
