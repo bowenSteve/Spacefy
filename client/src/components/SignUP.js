@@ -27,8 +27,8 @@ function SignUpPage() {
         e.preventDefault();
 
         const apiEndpoint = formData.role === "Space_Owner"
-            ? 'https://spacefy.onrender.com/admin_signup'
-            : 'https://spacefy.onrender.com/signup';
+            ? `${process.env.REACT_APP_API_URL}/admin_signup`
+            : `${process.env.REACT_APP_API_URL}/signup`;
 
         const formDataToSend = new FormData();
         formDataToSend.append("first_name", formData.firstName);

@@ -23,7 +23,7 @@ function AddSpace() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('https://spacefy.onrender.com/spaces', {
+        fetch(`${process.env.REACT_APP_API_URL}/spaces`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

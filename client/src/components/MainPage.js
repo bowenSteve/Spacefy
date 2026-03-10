@@ -12,7 +12,7 @@ function MainPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://spacefy.onrender.com/spaces')
+    fetch(`${process.env.REACT_APP_API_URL}/spaces`)
       .then(res => res.json())
       .then(data => {
         setSpaces(data);
@@ -69,9 +69,9 @@ function MainPage() {
               {selectedOption}
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('All')}>All</a></li>
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('Rates')}>Rates</a></li>
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('Capacity')}>Capacity</a></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('All')}>All</button></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('Rates')}>Rates</button></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('Capacity')}>Capacity</button></li>
             </ul>
           </div>
           <div className="search-wrapper">
@@ -104,7 +104,7 @@ function MainPage() {
                 <p><strong>Location:</strong> {space.location}</p>
                 <p><strong>Hourly Rates:</strong> ${space.hourly_price}</p>
                 <p><strong>Daily Rates:</strong> ${space.daily_price}</p>
-                <img alt="image" src={space.image_url} className="space-image" />
+                <img alt="space" src={space.image_url} className="space-image" />
               </div>
             ))}
           </div>)}

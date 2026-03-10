@@ -40,7 +40,7 @@ function Simulate() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch("https://spacefy.onrender.com/current_user", {
+      fetch(`${process.env.REACT_APP_API_URL}/current_user`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -65,7 +65,7 @@ function Simulate() {
   }, []);
 
   const handleSubmit = () => {
-    fetch(`https://spacefy.onrender.com/spaces/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/spaces/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function Simulate() {
   const createBooking = () => {
     const token = localStorage.getItem('token');
 
-    fetch("https://spacefy.onrender.com/create_booking", {
+    fetch(`${process.env.REACT_APP_API_URL}/create_booking`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function Simulate() {
   const createPayment = () => {
     const token = localStorage.getItem('token');
 
-    fetch("https://spacefy.onrender.com/create_payment", {
+    fetch(`${process.env.REACT_APP_API_URL}/create_payment`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

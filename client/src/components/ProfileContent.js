@@ -15,7 +15,7 @@ function ProfileContent({ user }) {
   const handleSubmit = (e) => {
     const token = localStorage.getItem("token");
     e.preventDefault();
-    fetch(`https://spacefy.onrender.com/users/${user.id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

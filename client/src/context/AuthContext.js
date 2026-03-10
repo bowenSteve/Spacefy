@@ -1,72 +1,73 @@
-import React, { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = async ({ username, password }) => {
+  const fetchCurrentUser = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     try {
-      const response = await axios.post('/login', { username, password });
-      const { access_token } = response.data;
-      setUser({ username, token: access_token });
-      localStorage.setItem('token', access_token);
-      return response;
-    } catch (error) {
-      console.error('Login failed', error);
-      if (error.response) {
-        return error.response;
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user_details`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
       } else {
-        throw error;
+        localStorage.removeItem('token');
       }
+    } catch {
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
+
+  const login = async (email, password) => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || 'Invalid email or password');
+    }
+    const data = await response.json();
+    localStorage.setItem('token', data.access_token);
+    await fetchCurrentUser();
   };
 
-  const register = async ({ firstName, secondName, email, password, role }) => {
+  const logout = async () => {
+    const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('/users', { firstName, secondName, email, password, role });
-      const { access_token } = response.data;
-      setUser({ email, token: access_token });
-      localStorage.setItem('token', access_token);
-
-      return response;
-    } catch (error) {
-      console.error('Registration failed', error);
-      if (error.response) {
-        return error.response;
-      } else {
-        throw error; 
-      }
+      await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } finally {
+      localStorage.removeItem('token');
+      setUser(null);
     }
-  };
-
-  const patchUser = async (userData) => {
-    try {
-      const token = localStorage.getItem('token');
-      const headers = { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}` 
-      };
-      const response = await axios.patch('/users', userData, { headers });
-      return response.data;
-    } catch (error) {
-      console.error('Failed to update user:', error);
-      throw error;
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, patchUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

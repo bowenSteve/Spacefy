@@ -1,114 +1,18 @@
-import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // For local authentication
-  const [firstName, setFirstName] = useState("");
+  const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
-  const { logout: auth0Logout, isAuthenticated, user: auth0User, getIdTokenClaims } = useAuth0(); // Auth0 hook
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      fetch("https://spacefy.onrender.com/current_user", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-        .then(response => response.ok ? response.json() : Promise.reject("Failed to fetch current user"))
-        .then(data => {
-          if (data.id) {
-            setIsLoggedIn(true);
-            setFirstName(data.first_name);
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching current user:", error);
-        });
-    } else if (isAuthenticated) {
-      setIsLoggedIn(true);
-      setFirstName(auth0User?.given_name || "User"); // Use Auth0 user details if available
-    } else {
-      setIsLoggedIn(false);
-      setFirstName("");
-    }
-  }, [isAuthenticated, auth0User]);
-
-  // Send user data to google_login endpoint when authenticated
-  useEffect(() => {
-    const sendGoogleLoginData = async () => {
-      if (isAuthenticated && auth0User) {
-        try {
-          const idToken = await getIdTokenClaims(); // Get the ID token
-          const response = await fetch("https://spacefy.onrender.com/google_login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${idToken.__raw}` // Use ID token as Bearer token
-            },
-            body: JSON.stringify({ email: auth0User.email }),
-          });
-  
-          if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.access_token); // Store the JWT token in localStorage
-          } else {
-            const err = await response.json();
-            console.error("Error:", err);
-          }
-        } catch (error) {
-          console.error("Error sending Google login data:", error);
-        }
-      }
-    };
-  
-    sendGoogleLoginData();
-  }, [isAuthenticated, auth0User, getIdTokenClaims]);
-  
 
   const handleLogin = () => {
-    if (isLoggedIn) {
-      logout();
+    if (user) {
+      logout().then(() => navigate('/login'));
     } else {
       navigate("/login");
     }
-  };
-
-  const logout = () => {
-    const token = localStorage.getItem('token');
-
-    // If using Auth0, logout from Auth0
-    if (isAuthenticated) {
-      auth0Logout({ returnTo: window.location.origin }); // Redirect to home page or login page
-    }
-
-    // Clear local authentication
-    fetch('https://spacefy.onrender.com/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          setIsLoggedIn(false);
-          setFirstName("");
-          localStorage.removeItem('token');
-          navigate('/login');
-        } else {
-          console.log("Something went wrong");
-        }
-      })
-      .catch(error => {
-        console.error("Error logging out:", error);
-      });
   };
 
   return (
@@ -122,35 +26,36 @@ function Navbar() {
                 <span className="nav-link main-text" aria-current="page">Home</span>
               </Link>
             </li>
-            
             <li className="nav-item">
-            <Link to={"/aboutus"} className="link-color">
-              <span className="nav-link main-text" aria-current="page" href="#about">About Us</span>
+              <Link to={"/aboutus"} className="link-color">
+                <span className="nav-link main-text">About Us</span>
               </Link>
             </li>
             <li className="nav-item">
-            <Link to={"/services"} className="link-color">
-                <span className="nav-link main-text" aria-current="page">Services</span>  
+              <Link to={"/services"} className="link-color">
+                <span className="nav-link main-text">Services</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link to={"/contact"} className="link-color">
-                <span className="nav-link main-text" aria-current="page">Contact</span>
+                <span className="nav-link main-text">Contact</span>
               </Link>
             </li>
           </ul>
         </div>
-        {isLoggedIn && (
+        {user && (
           <Link to={"/profile"}>
             <span className="navbar-text me-3 main-text link-color profile-btn">
               <FontAwesomeIcon icon={faUserCircle} size="lg" className="me-2 main-text" id="svg"/>
-              <span>{firstName}</span>
+              <span>{user.first_name}</span>
             </span>
           </Link>
         )}
-        <button className="btn btn-outline-light navbtn me-0" onClick={handleLogin}>
-          <span>{isLoggedIn ? "Logout" : "Login"}</span>
-        </button>
+        {!loading && (
+          <button className="btn btn-outline-light navbtn me-0" onClick={handleLogin}>
+            <span>{user ? "Logout" : "Login"}</span>
+          </button>
+        )}
       </div>
     </nav>
   );

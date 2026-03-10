@@ -40,7 +40,7 @@ function EditSpace({ space }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`https://spacefy.onrender.com/spaces/${space.id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/spaces/${space.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ function EditSpace({ space }) {
 
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this space?")) {
-            fetch(`https://spacefy.onrender.com/spaces/${space.id}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/spaces/${space.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

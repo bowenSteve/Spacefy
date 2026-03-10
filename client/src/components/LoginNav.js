@@ -1,12 +1,7 @@
 
-import { Link,useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar(){
-
-  const navigate = useNavigate()
-
-
-
 
     return (
         <nav className="navbar navbar-expand-lg fixed-top navbar-scroll custom-navbar">
@@ -15,22 +10,16 @@ function Navbar(){
         <div className="collapse navbar-collapse justify-content-center" id="navbarExample01">
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item active">
-              <Link to={"/"} className="link-color" ><a className="nav-link main-text" aria-current="page" href="#home">Home</a></Link>
+              <Link to={"/"} className="nav-link main-text link-color" aria-current="page">Home</Link>
             </li>
             <li className="nav-item">
-            <Link to={"/aboutus"} className="link-color">
-              <a className="nav-link main-text" aria-current="page" href="#about">About Us</a>
-              </Link>
+              <Link to={"/aboutus"} className="nav-link main-text link-color" aria-current="page">About Us</Link>
             </li>
             <li className="nav-item">
-            <Link to={"/services"} className="link-color">
-              <a className="nav-link main-text" aria-current="page" >Services</a>
-              </Link>
+              <Link to={"/services"} className="nav-link main-text link-color" aria-current="page">Services</Link>
             </li>
             <li className="nav-item">
-            <Link to={"/contact"} className="link-color">
-              <a className="nav-link main-text" aria-current="page" >Contact</a>
-              </Link>
+              <Link to={"/contact"} className="nav-link main-text link-color" aria-current="page">Contact</Link>
             </li>
           </ul>
         </div>

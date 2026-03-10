@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Import default styles
@@ -22,14 +23,14 @@ function Payment(){
   const [tax, setTax] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [rate, setRate] = useState(0);
-  const [isLoggedin, setIsLoggedin] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([null, null]);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isLoggedin = !!user;
 
   useEffect(() => {
-    fetch(`https://spacefy.onrender.com/spaces/${id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/spaces/${id}`)
       .then(res => res.json())
       .then(data => {
         setSpace(data);
@@ -42,7 +43,7 @@ function Payment(){
   }, [id]);
 
   useEffect(() => {
-    fetch(`https://spacefy.onrender.com/get_bookings/${id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/get_bookings/${id}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data.bookings)) {
@@ -57,48 +58,15 @@ function Payment(){
   }, [id]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      fetch("https://spacefy.onrender.com/current_user", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Failed to fetch current user");
-          }
-        })
-        .then(data => {
-          if (data.id) {
-            setIsLoggedin(true);
-            console.log(data)
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching current user:", error);
-        });
-    }
-  }, []);
-
-  useEffect(() => {
     if (startDate && endDate) {
-      calculateTaxAndTotal();
+      const taxRate = 0.13;
+      const duration = calculateDuration(startDate, endDate);
+      const calculatedTax = Math.round(rate * duration * taxRate);
+      const calculatedAmount = Math.round(rate * duration);
+      setTax(calculatedTax);
+      setTotalAmount(calculatedAmount + calculatedTax);
     }
-  }, [startDate, endDate]);
-
-  const calculateTaxAndTotal = () => {
-    const taxRate = 0.13;
-    const duration = calculateDuration(startDate, endDate);
-    const calculatedTax = Math.round(rate * duration * taxRate);
-    const calculatedAmount = Math.round(rate * duration);
-    setTax(calculatedTax);
-    setTotalAmount(calculatedAmount + calculatedTax);
-  };
+  }, [startDate, endDate, rate]);
 
   const calculateDuration = (start, end) => {
     if (!start || !end) return 0;
@@ -112,8 +80,6 @@ function Payment(){
     if (dates.length === 2) {
       setStartDate(dates[0]);
       setEndDate(dates[1]);
-    } else {
-      setSelectedDate(dates);
     }
   };
 
@@ -124,11 +90,6 @@ function Payment(){
     }
     if (!startDate || !endDate) {
       console.log('Start date or end date is not set, please select dates');
-      return;
-    }
-
-    if (!isLoggedin) {
-      navigate("/login");
       return;
     }
 

@@ -11,7 +11,7 @@ function Admin() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("https://spacefy.onrender.com/admins", {
+    fetch(`${process.env.REACT_APP_API_URL}/admins`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ function Admin() {
   const handleConfirmVerification = () => {
     if (selectedAdmin) {
       // First, verify the admin
-      fetch("https://spacefy.onrender.com/add_admin", {
+      fetch(`${process.env.REACT_APP_API_URL}/add_admin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function Admin() {
       })
       .then(() => {
         // Then, update the closed status of the selected admin
-        return fetch("https://spacefy.onrender.com/update_admin_status", {
+        return fetch(`${process.env.REACT_APP_API_URL}/update_admin_status`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function Admin() {
       })
       .then(() => {
         // Finally, send the confirmation email
-        return fetch("https://spacefy.onrender.com/sendmail", {
+        return fetch(`${process.env.REACT_APP_API_URL}/sendmail`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +110,7 @@ function Admin() {
           setShowModal(false);
           setSelectedAdmin(null);
           // Refresh the list of admins
-          fetch("https://spacefy.onrender.com/admins", {
+          fetch(`${process.env.REACT_APP_API_URL}/admins`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

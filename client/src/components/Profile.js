@@ -15,7 +15,7 @@ function Profile() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("https://spacefy.onrender.com/user_details", {
+    fetch(`${process.env.REACT_APP_API_URL}/user_details`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,

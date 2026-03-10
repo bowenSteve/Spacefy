@@ -62,9 +62,9 @@ function Home() {
               {selectedOption}
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('All')}>All</a></li>
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('Rates')}>Rates</a></li>
-              <li><a className="dropdown-item" href="#" onClick={() => handleSelect('Capacity')}>Capacity</a></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('All')}>All</button></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('Rates')}>Rates</button></li>
+              <li><button className="dropdown-item" onClick={() => handleSelect('Capacity')}>Capacity</button></li>
             </ul>
           </div>
           <div className="search-wrapper mb-2">
@@ -82,7 +82,7 @@ function Home() {
           {filteredSpaces.map((space, index) => (
             <div key={index} className="col-lg-4 col-md-6 space-item mb-4" onClick={() => handleSpaceClick(space.id)}>
               <div className="card h-100">
-                <img alt="image" src={space.image_url} className="card-img-top space-image" />
+                <img alt="space" src={space.image_url} className="card-img-top space-image" />
                 <div className="card-body">
                   <h2 className="card-title">{space.name}</h2>
                   <p><strong>Special Features:</strong></p>

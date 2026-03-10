@@ -63,7 +63,7 @@ function Footer(){
      
       <div className="text-center p-4 main-text" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
         © 2024 Copyright:
-        <a className="text-reset fw-bold main-text" href="#">Spacefy</a>
+        <a className="text-reset fw-bold main-text" href="/">Spacefy</a>
       </div>
      
     </footer>

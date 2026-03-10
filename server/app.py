@@ -1,4 +1,3 @@
-import random
 import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
@@ -30,9 +29,9 @@ mail = Mail(app)
 
 # Database Configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URI')
-app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY') + str(random.randint(1, 1000000000000))
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
-app.config["SECRET_KEY"] = os.getenv('SECRET_KEY') + str(random.randint(1, 1000000000000))
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 
 bcrypt = Bcrypt(app)

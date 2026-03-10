@@ -3,14 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch("https://spacefy.onrender.com/current_user", {
+      fetch(`${process.env.REACT_APP_API_URL}/current_user`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -26,7 +25,6 @@ function Navbar() {
         .then(data => {
           if (data.id) {
             setIsLoggedIn(true);
-            setFirstName(data.first_name);
           }
         })
         .catch(error => {
@@ -44,9 +42,7 @@ function Navbar() {
   }
 
   function logout() {
-    const token = localStorage.getItem('token');
-
-    fetch('https://spacefy.onrender.com/logout', {
+    fetch(`${process.env.REACT_APP_API_URL}/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +53,6 @@ function Navbar() {
       .then(res => {
         if (res.success) {
           setIsLoggedIn(false);
-          setFirstName("");
           localStorage.removeItem('token');
           navigate('/login');
         } else {
